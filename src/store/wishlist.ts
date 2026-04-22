@@ -85,9 +85,9 @@ type ProfileState = {
 export const useProfile = create<ProfileState>()(
   persist(
     (set) => ({
-      name: "You",
+      name: "Вы",
       handle: "you",
-      bio: "Collecting small, quiet upgrades.",
+      bio: "Собираю маленькие спокойные апгрейды.",
       color: "#ff5d83",
       setProfile: (p) => set((s) => ({ ...s, ...p })),
     }),

@@ -11,10 +11,10 @@ export type Friend = {
 
 export const me = {
   id: "me",
-  name: "You",
+  name: "Вы",
   handle: "you",
   avatar: "https://i.pravatar.cc/160?img=68",
-  bio: "Collecting small, quiet upgrades.",
+  bio: "Собираю маленькие спокойные апгрейды.",
   color: "#ff5d83",
 };
 
@@ -24,7 +24,7 @@ export const friends: Friend[] = [
     name: "Maya Lindgren",
     handle: "maya",
     avatar: "https://i.pravatar.cc/160?img=47",
-    bio: "Architect. Keeps a running list of things that make Mondays better.",
+    bio: "Архитектор. Ведёт список вещей, из‑за которых понедельники становятся лучше.",
     color: "#f6bfcf",
     wishlist: [
       "p_dyson_airwrap",
@@ -41,7 +41,7 @@ export const friends: Friend[] = [
     name: "Kenji Okafor",
     handle: "kenji",
     avatar: "https://i.pravatar.cc/160?img=15",
-    bio: "Product designer, cyclist, terrible guitarist.",
+    bio: "Продуктовый дизайнер, велосипедист и ужасный гитарист.",
     color: "#c2d6ff",
     wishlist: [
       "p_sony_wh1000xm5",
@@ -58,7 +58,7 @@ export const friends: Friend[] = [
     name: "Sana Delacroix",
     handle: "sana",
     avatar: "https://i.pravatar.cc/160?img=32",
-    bio: "Writes cookbooks. Will die on the Staub vs Le Creuset hill.",
+    bio: "Пишет кулинарные книги. Умрёт на холме «Staub против Le Creuset».",
     color: "#ffd0a8",
     wishlist: [
       "p_lodge_cast_iron",
@@ -75,7 +75,7 @@ export const friends: Friend[] = [
     name: "Theo Alban",
     handle: "theo",
     avatar: "https://i.pravatar.cc/160?img=12",
-    bio: "Backpacker. 47 countries, one pair of shoes.",
+    bio: "Бэкпекер. 47 стран — одна пара кроссовок.",
     color: "#b6dac3",
     wishlist: [
       "p_arcteryx_beta",
@@ -91,7 +91,7 @@ export const friends: Friend[] = [
     name: "Iris Nakamura",
     handle: "iris",
     avatar: "https://i.pravatar.cc/160?img=48",
-    bio: "Reader. Makes perfect playlists. Has strong opinions about paper.",
+    bio: "Читает. Собирает идеальные плейлисты. У неё сильное мнение про бумагу.",
     color: "#d4b0ff",
     wishlist: [
       "p_kindle_paperwhite",
@@ -107,7 +107,7 @@ export const friends: Friend[] = [
     name: "Diego Marín",
     handle: "diego",
     avatar: "https://i.pravatar.cc/160?img=60",
-    bio: "Builds synths on weekends. Signal chain enthusiast.",
+    bio: "По выходным паяет синты. Фанат сигнальной цепи.",
     color: "#ffe3a8",
     wishlist: [
       "p_sonos_era_300",
