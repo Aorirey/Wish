@@ -39,7 +39,7 @@ export default function FriendPage({
         href="/app/friends"
         className="inline-flex items-center gap-1 text-sm text-ink-500 transition hover:text-ink-900"
       >
-        <ArrowLeft className="h-4 w-4" /> All friends
+        <ArrowLeft className="h-4 w-4" /> Все друзья
       </Link>
 
       <motion.section
@@ -64,7 +64,7 @@ export default function FriendPage({
                 {friend!.name}
               </h1>
               <p className="mt-1 text-sm text-ink-500">
-                @{friend!.handle} · active {timeAgo(friend!.lastActive)}
+                @{friend!.handle} · был(а) онлайн {timeAgo(friend!.lastActive)}
               </p>
               <p className="mt-3 max-w-md text-ink-600">{friend!.bio}</p>
             </div>
@@ -73,29 +73,29 @@ export default function FriendPage({
             <button
               onClick={() =>
                 toast({
-                  title: "Reminder set",
-                  description: `We'll ping you before ${friend!.name.split(" ")[0]}'s birthday.`,
+                  title: "Напоминание установлено",
+                  description: `Мы напомним перед днём рождения: ${friend!.name.split(" ")[0]}.`,
                   tone: "success",
                 })
               }
               className="btn-outline"
             >
-              <Gift className="h-4 w-4" /> Remind me
+              <Gift className="h-4 w-4" /> Напомнить мне
             </button>
             <button
               onClick={() =>
-                toast({ title: "Invitation sent", description: `${friend!.name} got a nudge.` })
+                toast({ title: "Приглашение отправлено", description: `${friend!.name} получил(а) мягкий пинг.` })
               }
               className="btn-primary"
             >
-              <Share2 className="h-4 w-4" /> Nudge
+              <Share2 className="h-4 w-4" /> Пинг
             </button>
           </div>
         </div>
         <div className="relative mt-8 grid grid-cols-3 gap-4 border-t border-ink-200/70 pt-6 text-sm">
           <div>
             <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-              Items
+              Товаров
             </p>
             <p className="mt-1 font-display text-2xl font-medium text-ink-950">
               {items.length}
@@ -103,7 +103,7 @@ export default function FriendPage({
           </div>
           <div>
             <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-              List value
+              Сумма списка
             </p>
             <p className="mt-1 font-display text-2xl font-medium text-ink-950">
               {formatPrice(total)}
@@ -111,7 +111,7 @@ export default function FriendPage({
           </div>
           <div>
             <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-              Reserved by you
+              Вы забронировали
             </p>
             <p className="mt-1 font-display text-2xl font-medium text-ink-950">
               {Object.values(reserved).filter(Boolean).length}
@@ -123,10 +123,10 @@ export default function FriendPage({
       <section>
         <div className="mb-5 flex items-end justify-between">
           <h2 className="font-display text-2xl font-medium text-ink-950">
-            {friend!.name.split(" ")[0]}'s wishlist
+            Вишлист: {friend!.name.split(" ")[0]}
           </h2>
           <p className="text-xs text-ink-400">
-            Claim an item so no one doubles up.
+            Забронируйте подарок, чтобы никто не повторился.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -143,7 +143,7 @@ export default function FriendPage({
                     onClick={() => {
                       setReserved((r) => ({ ...r, [p.id]: !r[p.id] }));
                       toast({
-                        title: isReserved ? "Unreserved" : "Reserved — nicely done",
+                        title: isReserved ? "Бронь снята" : "Забронировано — отлично",
                         description: p.title,
                         tone: isReserved ? "default" : "success",
                       });
@@ -155,7 +155,7 @@ export default function FriendPage({
                         : "border-ink-200 bg-white text-ink-700 hover:border-ink-900 hover:bg-ink-950 hover:text-white")
                     }
                   >
-                    {isReserved ? "Reserved by you" : "Reserve this gift"}
+                    {isReserved ? "Забронировано вами" : "Забронировать подарок"}
                   </button>
                 }
               />

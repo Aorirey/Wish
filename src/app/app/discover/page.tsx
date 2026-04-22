@@ -9,10 +9,10 @@ import { products, categories, type Category } from "@/data/products";
 import { cn, formatPrice } from "@/lib/utils";
 
 const priceBuckets = [
-  { id: "under50", label: "Under $50", test: (c: number) => c < 5000 },
-  { id: "50-150", label: "$50 – $150", test: (c: number) => c >= 5000 && c < 15000 },
-  { id: "150-400", label: "$150 – $400", test: (c: number) => c >= 15000 && c < 40000 },
-  { id: "over400", label: "Over $400", test: (c: number) => c >= 40000 },
+  { id: "under3k", label: "До 3 000 ₽", test: (c: number) => c < 3000 },
+  { id: "3-10k", label: "3 000 – 10 000 ₽", test: (c: number) => c >= 3000 && c < 10000 },
+  { id: "10-30k", label: "10 000 – 30 000 ₽", test: (c: number) => c >= 10000 && c < 30000 },
+  { id: "over30k", label: "От 30 000 ₽", test: (c: number) => c >= 30000 },
 ];
 
 type SortBy = "trending" | "priceAsc" | "priceDesc";
@@ -81,10 +81,10 @@ function DiscoverPage() {
     <div className="mx-auto max-w-6xl space-y-8 px-4 py-10 md:px-8">
       <header>
         <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
-          Discover
+          Каталог
         </p>
         <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
-          {filtered.length} things worth wanting.
+          {filtered.length} вещей, которые стоит захотеть.
         </h1>
       </header>
 
@@ -94,7 +94,7 @@ function DiscoverPage() {
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search products, brands, or tags…"
+              placeholder="Поиск по названию, бренду или тегу…"
               className="input flex-1"
             />
             <select
@@ -102,13 +102,13 @@ function DiscoverPage() {
               onChange={(e) => setSort(e.target.value as SortBy)}
               className="hidden rounded-xl border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 focus:border-ink-400 focus:outline-none md:block"
             >
-              <option value="trending">Trending</option>
-              <option value="priceAsc">Price: low to high</option>
-              <option value="priceDesc">Price: high to low</option>
+              <option value="trending">В тренде</option>
+              <option value="priceAsc">Сначала дешевле</option>
+              <option value="priceDesc">Сначала дороже</option>
             </select>
             {activeFilterCount > 0 && (
               <button onClick={clearAll} className="btn-ghost !px-3">
-                <X className="h-4 w-4" /> Clear
+                <X className="h-4 w-4" /> Сбросить
               </button>
             )}
           </div>
@@ -120,7 +120,7 @@ function DiscoverPage() {
                 cat === "all" && "!border-ink-900 !bg-ink-950 !text-white"
               )}
             >
-              All
+              Все
             </button>
             {categories.map((c) => (
               <button
@@ -150,7 +150,7 @@ function DiscoverPage() {
             ))}
             <span className="ml-auto flex items-center gap-1 text-xs text-ink-400 md:hidden">
               <SlidersHorizontal className="h-3 w-3" />
-              {filtered.length} results
+              {filtered.length} найдено
             </span>
           </div>
         </div>
@@ -162,12 +162,12 @@ function DiscoverPage() {
           animate={{ opacity: 1 }}
           className="card flex flex-col items-center gap-3 p-12 text-center"
         >
-          <p className="font-display text-xl text-ink-950">Nothing matches that.</p>
+          <p className="font-display text-xl text-ink-950">Ничего не нашлось.</p>
           <p className="max-w-md text-sm text-ink-500">
-            Try a different keyword, or relax the category and price filters.
+            Попробуйте другой запрос или ослабьте фильтры по категории и цене.
           </p>
           <button onClick={clearAll} className="btn-outline mt-2">
-            Reset filters
+            Сбросить фильтры
           </button>
         </motion.div>
       ) : (
@@ -179,8 +179,7 @@ function DiscoverPage() {
       )}
 
       <p className="text-center text-xs text-ink-400">
-        Showing {filtered.length} of {products.length}. Prices reflect approximate
-        US retail ({formatPrice(Math.min(...products.map((p) => p.price)))}
+        Показано {filtered.length} из {products.length}. Цены приблизительно соответствуют российской рознице ({formatPrice(Math.min(...products.map((p) => p.price)))}
         {" – "}
         {formatPrice(Math.max(...products.map((p) => p.price)))}).
       </p>

@@ -15,7 +15,7 @@ import {
 import { useMemo, useState } from "react";
 import { useWishlist } from "@/store/wishlist";
 import { products } from "@/data/products";
-import { formatPrice, timeAgo } from "@/lib/utils";
+import { formatPrice, pluralizeItems, timeAgo } from "@/lib/utils";
 import { toast } from "@/components/ui/Toaster";
 
 type Filter = "all" | "high" | "medium" | "low";
@@ -31,14 +31,13 @@ function Empty() {
         <Heart className="h-6 w-6" />
       </div>
       <h2 className="font-display text-2xl font-medium text-ink-950">
-        Your list is a blank page
+        Ваш список пока пуст
       </h2>
       <p className="max-w-md text-sm text-ink-500">
-        Tap the heart on anything that sparks a little joy. Start with what you'd
-        buy yourself on a good day.
+        Нажмите на сердечко рядом с тем, что радует глаз. Начните с того, что купили бы себе в хороший день.
       </p>
       <Link href="/app/discover" className="btn-primary">
-        Browse ideas <ArrowUpRight className="h-4 w-4" />
+        Посмотреть идеи <ArrowUpRight className="h-4 w-4" />
       </Link>
     </motion.div>
   );
@@ -79,18 +78,18 @@ export default function MyWishlistPage() {
   }
 
   const filters: { id: Filter; label: string }[] = [
-    { id: "all", label: `All · ${items.length}` },
+    { id: "all", label: `Все · ${items.length}` },
     {
       id: "high",
-      label: `Dreaming · ${items.filter((i) => i.priority === "high").length}`,
+      label: `Мечтаю · ${items.filter((i) => i.priority === "high").length}`,
     },
     {
       id: "medium",
-      label: `Soon · ${items.filter((i) => i.priority === "medium").length}`,
+      label: `Скоро · ${items.filter((i) => i.priority === "medium").length}`,
     },
     {
       id: "low",
-      label: `Maybe · ${items.filter((i) => i.priority === "low").length}`,
+      label: `Может быть · ${items.filter((i) => i.priority === "low").length}`,
     },
   ];
 
@@ -99,13 +98,13 @@ export default function MyWishlistPage() {
       <header className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
-            Your list
+            Ваш список
           </p>
           <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
-            Quietly collecting.
+            Тихо собираете желания.
           </h1>
           <p className="mt-2 text-ink-500">
-            {items.length} items · worth {formatPrice(total)} all together.
+            {pluralizeItems(items.length)} · на сумму {formatPrice(total)}.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -117,18 +116,18 @@ export default function MyWishlistPage() {
               }
               setCopied(true);
               setTimeout(() => setCopied(false), 1600);
-              toast({ title: "Link copied", description: url, tone: "success" });
+              toast({ title: "Ссылка скопирована", description: url, tone: "success" });
             }}
             className="btn-outline"
           >
             {copied ? <Check className="h-4 w-4" /> : <Link2 className="h-4 w-4" />}
-            {copied ? "Copied" : "Copy link"}
+            {copied ? "Скопировано" : "Копировать ссылку"}
           </button>
           <button
-            onClick={() => toast({ title: "Share sheet opened", description: "You can send this list to anyone." })}
+            onClick={() => toast({ title: "Меню шаринга открыто", description: "Теперь список можно отправить кому угодно." })}
             className="btn-primary"
           >
-            <Share2 className="h-4 w-4" /> Share
+            <Share2 className="h-4 w-4" /> Поделиться
           </button>
         </div>
       </header>
@@ -190,7 +189,7 @@ export default function MyWishlistPage() {
                         {row.product.title}
                       </Link>
                       <p className="mt-1 text-[11px] text-ink-400">
-                        Added {timeAgo(row.addedAt)}
+                        Добавлено {timeAgo(row.addedAt)}
                       </p>
                     </div>
                     <div className="mt-auto flex items-end justify-between gap-3 pt-3">
@@ -209,7 +208,7 @@ export default function MyWishlistPage() {
                               }
                             >
                               {p === "high" && <Sparkles className="h-3 w-3" />}
-                              {p === "high" ? "Dreaming" : p === "medium" ? "Soon" : "Maybe"}
+                              {p === "high" ? "Мечтаю" : p === "medium" ? "Скоро" : "Может быть"}
                             </button>
                           );
                         })}
@@ -221,9 +220,9 @@ export default function MyWishlistPage() {
                         <button
                           onClick={() => {
                             remove(row.productId);
-                            toast({ title: "Removed", description: row.product.title });
+                            toast({ title: "Удалено из списка", description: row.product.title });
                           }}
-                          aria-label="Remove"
+                          aria-label="Удалить"
                           className="rounded-full p-1.5 text-ink-400 hover:bg-accent-50 hover:text-accent-600"
                         >
                           <Trash2 className="h-4 w-4" />

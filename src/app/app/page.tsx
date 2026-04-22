@@ -9,24 +9,30 @@ import { products, categories } from "@/data/products";
 import { friends } from "@/data/friends";
 import { Avatar } from "@/components/ui/Avatar";
 import { useWishlist, useProfile } from "@/store/wishlist";
-import { formatPrice, timeAgo } from "@/lib/utils";
+import { formatPrice, timeAgo, pluralizeItems, pluralizeFriends } from "@/lib/utils";
 
 function AmbientHello() {
   const name = useProfile((s) => s.name);
   const firstName = name.split(" ")[0];
   const hour = new Date().getHours();
   const greeting =
-    hour < 5 ? "Still up" : hour < 12 ? "Good morning" : hour < 18 ? "Afternoon" : "Evening";
+    hour < 5
+      ? "Ещё не спите"
+      : hour < 12
+      ? "Доброе утро"
+      : hour < 18
+      ? "Добрый день"
+      : "Добрый вечер";
   return (
     <div>
       <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
         {greeting}
       </p>
       <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
-        Hey, {firstName}.
+        Привет, {firstName}.
       </h1>
       <p className="mt-3 max-w-xl text-ink-500">
-        Here's what your people are saving, and a few things worth considering.
+        Посмотрите, что сохраняют ваши друзья, и несколько вещей, которые стоит рассмотреть.
       </p>
     </div>
   );
@@ -37,27 +43,27 @@ function StatsRow() {
   const cards = [
     {
       icon: Heart,
-      label: "Your wishlist",
-      value: `${wishCount} item${wishCount === 1 ? "" : "s"}`,
-      sub: "Nicely curated",
+      label: "Ваш вишлист",
+      value: pluralizeItems(wishCount),
+      sub: "Аккуратно подобран",
     },
     {
       icon: Sparkles,
-      label: "Following",
-      value: `${friends.length} friends`,
-      sub: "Always discovering",
+      label: "Подписки",
+      value: pluralizeFriends(friends.length),
+      sub: "Всегда что‑то находят",
     },
     {
       icon: TrendingUp,
-      label: "This month",
-      value: "12,480 lists",
-      sub: "Community‑wide",
+      label: "За месяц",
+      value: "12 480 списков",
+      sub: "По всему сообществу",
     },
     {
       icon: Flame,
-      label: "Hot category",
-      value: "Kitchen",
-      sub: "+24% this week",
+      label: "Горячая категория",
+      value: "Кухня",
+      sub: "+24% за неделю",
     },
   ];
   return (
@@ -90,7 +96,6 @@ function StatsRow() {
 }
 
 function FriendActivity() {
-  // Build a synthetic activity feed from friends' wishlists
   const events = friends
     .flatMap((f) =>
       f.wishlist.slice(0, 2).map((pid, i) => {
@@ -109,17 +114,17 @@ function FriendActivity() {
       <div className="flex items-center justify-between border-b border-ink-200/70 px-5 py-4">
         <div>
           <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-            Friend activity
+            Активность друзей
           </p>
           <p className="mt-1 font-display text-lg font-medium text-ink-950">
-            Fresh saves
+            Свежие сохранения
           </p>
         </div>
         <Link
           href="/app/friends"
           className="text-xs font-medium text-ink-500 hover:text-ink-900"
         >
-          All friends
+          Все друзья
         </Link>
       </div>
       <ul className="divide-y divide-ink-200/70">
@@ -140,7 +145,7 @@ function FriendActivity() {
                 >
                   {e.friend.name.split(" ")[0]}
                 </Link>{" "}
-                saved{" "}
+                сохранил(а){" "}
                 <Link
                   href={`/app/product/${e.product.id}`}
                   className="font-medium text-ink-950 hover:underline"
@@ -176,12 +181,12 @@ function TrendingStrip() {
   const items = [
     "p_airpods_pro_2",
     "p_stanley_quencher",
-    "p_rhode_peptide",
+    "p_letique_lip",
     "p_lego_orchid",
-    "p_onitsuka_mexico",
-    "p_kindle_paperwhite",
-    "p_lululemon_align",
-    "p_fujifilm_x100vi",
+    "p_nb_574",
+    "p_onyx_palma",
+    "p_demix_leggings",
+    "p_fujifilm_xt30",
   ]
     .map((id) => products.find((p) => p.id === id)!)
     .filter(Boolean)
@@ -192,17 +197,17 @@ function TrendingStrip() {
       <div className="mb-4 flex items-end justify-between">
         <div>
           <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-            Trending with your circle
+            В тренде у ваших друзей
           </p>
           <h2 className="mt-1 font-display text-2xl font-medium text-ink-950">
-            Good taste, objectively
+            Объективно хороший вкус
           </h2>
         </div>
         <Link
           href="/app/discover"
           className="inline-flex items-center gap-1 text-sm font-medium text-ink-700 hover:text-ink-950"
         >
-          All items <ArrowRight className="h-4 w-4" />
+          Все товары <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -219,10 +224,10 @@ function CategoriesStrip() {
     <section>
       <div className="mb-4">
         <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-          Wander by category
+          По категориям
         </p>
         <h2 className="mt-1 font-display text-2xl font-medium text-ink-950">
-          Pick a mood
+          Выберите настроение
         </h2>
       </div>
       <div className="scrollbar-thin -mx-2 flex gap-3 overflow-x-auto px-2 pb-2">
@@ -240,7 +245,7 @@ function CategoriesStrip() {
               <span className="font-display text-2xl text-ink-500">{c.emoji}</span>
               <span className="text-sm font-medium text-ink-900">{c.label}</span>
               <span className="text-[11px] text-ink-400">
-                {products.filter((p) => p.category === c.id).length} items
+                {pluralizeItems(products.filter((p) => p.category === c.id).length)}
               </span>
             </Link>
           </motion.div>

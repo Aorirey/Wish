@@ -37,7 +37,7 @@ export function HeartButton({
         const wasOn = has;
         toggle(productId);
         toast({
-          title: wasOn ? "Removed from your list" : "Added to your list",
+          title: wasOn ? "Удалено из списка" : "Добавлено в список",
           description: productTitle,
           tone: wasOn ? "default" : "success",
         });
@@ -51,7 +51,7 @@ export function HeartButton({
         className
       )}
       aria-pressed={has}
-      aria-label={has ? "Remove from wishlist" : "Add to wishlist"}
+      aria-label={has ? "Убрать из списка" : "Добавить в список"}
     >
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span

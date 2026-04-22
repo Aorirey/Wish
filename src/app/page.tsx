@@ -16,8 +16,8 @@ const floats = [
   { id: "p_laneige_mask", x: "70%", y: "6%", size: 100, delay: 0.2 },
   { id: "p_sony_wh1000xm5", x: "82%", y: "42%", size: 150, delay: 0.4 },
   { id: "p_lego_orchid", x: "4%", y: "48%", size: 140, delay: 0.1 },
-  { id: "p_onitsuka_mexico", x: "16%", y: "72%", size: 115, delay: 0.25 },
-  { id: "p_marshall_emberton", x: "76%", y: "74%", size: 120, delay: 0.3 },
+  { id: "p_nb_574", x: "16%", y: "72%", size: 115, delay: 0.25 },
+  { id: "p_jbl_flip", x: "76%", y: "74%", size: 120, delay: 0.3 },
 ];
 
 function HeroFloats() {
@@ -84,7 +84,7 @@ function Hero() {
           className="chip mb-6"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-accent-500" />
-          New — shared lists for the people you love
+          Новое — совместные списки для тех, кого любите
         </motion.span>
 
         <motion.h1
@@ -93,9 +93,9 @@ function Hero() {
           transition={{ delay: 0.15, duration: 0.7 }}
           className="font-display text-[44px] font-medium leading-[1.02] tracking-tight text-ink-950 sm:text-6xl md:text-7xl"
         >
-          Lists worth
+          Списки, которыми
           <span className="relative inline-block px-2">
-            <span className="relative z-10 italic text-accent-600">sharing.</span>
+            <span className="relative z-10 italic text-accent-600">делятся.</span>
             <svg
               aria-hidden
               viewBox="0 0 220 24"
@@ -114,7 +114,7 @@ function Hero() {
             </svg>
           </span>
           <br className="hidden sm:block" />
-          Birthdays made easy.
+          Подарки без головной боли.
         </motion.h1>
 
         <motion.p
@@ -123,8 +123,7 @@ function Hero() {
           transition={{ delay: 0.35, duration: 0.6 }}
           className="mt-6 max-w-xl text-pretty text-base text-ink-500 sm:text-lg"
         >
-          Wishly is a small, friendly place to collect the things you love and peek at
-          what your people are dreaming about — from real stores, with real prices.
+          Wishly — уютное место, где можно собрать всё, что вам нравится, и заглянуть в мечты своих близких. Товары из реальных российских магазинов с настоящими ценами.
         </motion.p>
 
         <motion.div
@@ -134,10 +133,10 @@ function Hero() {
           className="mt-8 flex flex-col items-center gap-3 sm:flex-row"
         >
           <Link href="/app" className="btn-accent">
-            Start your list <ArrowRight className="h-4 w-4" />
+            Начать свой список <ArrowRight className="h-4 w-4" />
           </Link>
           <Link href="/app/friends" className="btn-ghost">
-            Peek at friends' lists
+            Посмотреть списки друзей
           </Link>
         </motion.div>
 
@@ -153,8 +152,7 @@ function Hero() {
             ))}
           </div>
           <span>
-            <span className="font-medium text-ink-900">12,480</span> lists started
-            this month
+            <span className="font-medium text-ink-900">12 480</span> новых списков в этом месяце
           </span>
         </motion.div>
       </div>
@@ -172,27 +170,27 @@ function Features() {
   const items = [
     {
       icon: Heart,
-      title: "Save from anywhere",
+      title: "Сохраняйте что угодно",
       body:
-        "Drop in a link from Apple, Sephora, Uniqlo, Hay — we pull the price, the photo, and keep it tidy.",
+        "Бросьте ссылку из Яндекс Маркета, Золотого Яблока, OZON или DNS — мы подтянем цену, фото и всё сложим аккуратно.",
     },
     {
       icon: Users,
-      title: "Follow the people you love",
+      title: "Следите за своими людьми",
       body:
-        "See what your friends are saving before their birthdays. Zero awkward guessing in group chats.",
+        "Вы видите, что сохраняют друзья — до их дней рождения. Никакой неловкости в семейном чате.",
     },
     {
       icon: Link2,
-      title: "Share one clean link",
+      title: "Одна опрятная ссылка",
       body:
-        "Your list lives at a link that looks like it was designed, not thrown together. No ads, ever.",
+        "Ваш список живёт по ссылке, которая выглядит так, будто над ней сидел дизайнер. Без рекламы. Навсегда.",
     },
     {
       icon: Gift,
-      title: "Reservations, not surprises",
+      title: "Бронь вместо сюрпризов",
       body:
-        "Friends can quietly claim a gift so two people don't show up with the same sweater.",
+        "Друзья могут тихо забронировать подарок, чтобы двое не пришли с одинаковым свитером.",
     },
   ];
 
@@ -200,11 +198,10 @@ function Features() {
     <section ref={ref} className="relative mx-auto max-w-6xl px-6 py-24">
       <motion.div style={{ y }} className="mb-16 max-w-2xl">
         <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
-          What you get
+          Что внутри
         </p>
         <h2 className="mt-3 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
-          Wishlists that feel like <span className="italic text-accent-600">a love letter</span>,
-          not a spreadsheet.
+          Вишлисты, похожие на <span className="italic text-accent-600">любовное письмо</span>, а не на табличку.
         </h2>
       </motion.div>
 
@@ -241,10 +238,10 @@ function Showcase() {
     "p_stanley_quencher",
     "p_dyson_airwrap",
     "p_lego_orchid",
-    "p_onitsuka_mexico",
-    "p_fujifilm_x100vi",
-    "p_vinyl_turntable",
-    "p_rhode_peptide",
+    "p_nb_574",
+    "p_fujifilm_xt30",
+    "p_at_turntable",
+    "p_letique_lip",
   ]
     .map((id) => products.find((p) => p.id === id)!)
     .filter(Boolean);
@@ -255,17 +252,17 @@ function Showcase() {
         <div className="mb-10 flex items-end justify-between gap-4">
           <div>
             <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
-              Trending right now
+              Сейчас в тренде
             </p>
             <h2 className="mt-2 font-display text-3xl font-medium tracking-tight text-ink-950 sm:text-4xl">
-              What the community is saving
+              Что сохраняет сообщество
             </h2>
           </div>
           <Link
             href="/app/discover"
             className="hidden items-center gap-1 text-sm font-medium text-ink-700 hover:text-ink-950 sm:inline-flex"
           >
-            See everything <ArrowRight className="h-4 w-4" />
+            Смотреть всё <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
@@ -313,17 +310,16 @@ function CTA() {
         <div className="relative max-w-xl">
           <Sparkles className="h-6 w-6 text-accent-300" />
           <h2 className="mt-4 font-display text-4xl font-medium leading-tight tracking-tight sm:text-5xl">
-            Your people already know what they want.
+            Ваши близкие уже знают, чего хотят.
           </h2>
           <p className="mt-4 text-ink-200">
-            You just need somewhere nice to keep it. Free, forever, no algorithm trying
-            to sell you feelings.
+            Нужно лишь красивое место, где это хранить. Бесплатно, навсегда, без алгоритмов, которые пытаются продать вам чувства.
           </p>
           <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
             <Link href="/app" className="btn bg-white text-ink-950 hover:bg-accent-500 hover:text-white">
-              Start your list <ArrowRight className="h-4 w-4" />
+              Начать свой список <ArrowRight className="h-4 w-4" />
             </Link>
-            <span className="text-xs text-ink-300">No account required to try.</span>
+            <span className="text-xs text-ink-300">Регистрация не требуется — можно просто попробовать.</span>
           </div>
         </div>
       </div>
@@ -338,21 +334,21 @@ function Footer() {
         <div>
           <Logo />
           <p className="mt-3 max-w-sm text-sm text-ink-500">
-            Made with care in a studio apartment. © {new Date().getFullYear()} Wishly.
+            Сделано с любовью в однокомнатной студии. © {new Date().getFullYear()} Wishly.
           </p>
         </div>
         <nav className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-500">
           <Link href="/app" className="hover:text-ink-950">
-            App
+            Приложение
           </Link>
           <Link href="/app/discover" className="hover:text-ink-950">
-            Discover
+            Каталог
           </Link>
           <Link href="/app/friends" className="hover:text-ink-950">
-            Friends
+            Друзья
           </Link>
           <a href="mailto:hi@wishly.app" className="hover:text-ink-950">
-            Contact
+            Контакты
           </a>
         </nav>
       </div>
@@ -368,17 +364,17 @@ export default function Landing() {
           <Logo />
           <nav className="hidden items-center gap-8 text-sm text-ink-600 md:flex">
             <Link href="/app/discover" className="hover:text-ink-950">
-              Discover
+              Каталог
             </Link>
             <Link href="/app/friends" className="hover:text-ink-950">
-              Friends
+              Друзья
             </Link>
             <Link href="#features" className="hover:text-ink-950">
-              How it works
+              Как это работает
             </Link>
           </nav>
           <Link href="/app" className="btn-primary !py-2 text-xs">
-            Open app <ArrowRight className="h-3.5 w-3.5" />
+            Открыть приложение <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
       </header>

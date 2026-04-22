@@ -9,7 +9,7 @@ import { Avatar } from "@/components/ui/Avatar";
 import { me } from "@/data/friends";
 import { toast } from "@/components/ui/Toaster";
 import { products } from "@/data/products";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, pluralizeItems } from "@/lib/utils";
 
 const PALETTE = [
   "#ff5d83",
@@ -39,10 +39,10 @@ export default function ProfilePage() {
     <div className="mx-auto max-w-4xl space-y-10 px-4 py-10 md:px-8">
       <header>
         <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
-          Your profile
+          Ваш профиль
         </p>
         <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
-          Make it yours.
+          Сделайте его своим.
         </h1>
       </header>
 
@@ -63,7 +63,7 @@ export default function ProfilePage() {
             </div>
             <div>
               <p className="font-display text-2xl font-medium text-ink-950">
-                {draftName || "You"}
+                {draftName || "Вы"}
               </p>
               <p className="text-sm text-ink-500">@{draftHandle || "you"}</p>
             </div>
@@ -73,7 +73,7 @@ export default function ProfilePage() {
         <div className="grid gap-5 p-6 pt-0 md:grid-cols-2">
           <div>
             <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-              Name
+              Имя
             </label>
             <input
               className="input mt-2"
@@ -83,7 +83,7 @@ export default function ProfilePage() {
           </div>
           <div>
             <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-              Handle
+              Ник
             </label>
             <div className="relative mt-2">
               <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-400">
@@ -100,19 +100,19 @@ export default function ProfilePage() {
           </div>
           <div className="md:col-span-2">
             <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-              Bio
+              О себе
             </label>
             <textarea
               rows={3}
               className="input mt-2 resize-none"
               value={draftBio}
               onChange={(e) => setDraftBio(e.target.value)}
-              placeholder="A line about what you're collecting…"
+              placeholder="Пара слов о том, что вы собираете…"
             />
           </div>
           <div className="md:col-span-2">
             <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-              Accent color
+              Акцентный цвет
             </label>
             <div className="mt-2 flex flex-wrap gap-2">
               {PALETTE.map((c) => (
@@ -121,7 +121,7 @@ export default function ProfilePage() {
                   onClick={() => setDraftColor(c)}
                   className="relative h-9 w-9 rounded-full border border-ink-200"
                   style={{ backgroundColor: c }}
-                  aria-label={`Choose color ${c}`}
+                  aria-label={`Выбрать цвет ${c}`}
                 >
                   {draftColor === c && (
                     <span className="absolute inset-0 flex items-center justify-center text-white">
@@ -143,7 +143,7 @@ export default function ProfilePage() {
             }}
             className="btn-ghost"
           >
-            Reset
+            Сбросить
           </button>
           <button
             onClick={() => {
@@ -153,11 +153,11 @@ export default function ProfilePage() {
                 bio: draftBio,
                 color: draftColor,
               });
-              toast({ title: "Profile updated", tone: "success" });
+              toast({ title: "Профиль обновлён", tone: "success" });
             }}
             className="btn-primary"
           >
-            Save changes
+            Сохранить
           </button>
         </div>
       </motion.section>
@@ -166,25 +166,25 @@ export default function ProfilePage() {
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-              Your data
+              Ваши данные
             </p>
             <h2 className="mt-1 font-display text-xl font-medium text-ink-950">
-              {wishlist.length} items · {formatPrice(totalValue)}
+              {pluralizeItems(wishlist.length)} · {formatPrice(totalValue)}
             </h2>
             <p className="mt-1 text-sm text-ink-500">
-              Stored locally in your browser. Export or clear anytime.
+              Хранятся локально в вашем браузере. В любой момент можно выгрузить или очистить.
             </p>
           </div>
           <button
             onClick={() => {
-              if (confirm("Clear your entire wishlist?")) {
+              if (confirm("Очистить весь вишлист?")) {
                 clear();
-                toast({ title: "Wishlist cleared" });
+                toast({ title: "Список очищен" });
               }
             }}
             className="btn-outline text-accent-600 hover:!bg-accent-50 hover:!text-accent-700"
           >
-            <Trash2 className="h-4 w-4" /> Clear list
+            <Trash2 className="h-4 w-4" /> Очистить список
           </button>
         </div>
         {wishlist.length > 0 && (

@@ -28,14 +28,14 @@ export function TopBar() {
         <input
           name="q"
           type="search"
-          placeholder="Search items, brands, friends…"
+          placeholder="Поиск товаров, брендов, друзей…"
           className="w-full rounded-full border border-ink-200 bg-white/90 py-2 pl-9 pr-4 text-sm text-ink-900 placeholder:text-ink-400 focus:border-ink-400 focus:outline-none focus:ring-2 focus:ring-ink-900/5"
         />
       </form>
       <button
         type="button"
         className="hidden h-9 w-9 items-center justify-center rounded-full border border-ink-200 bg-white text-ink-700 transition hover:border-ink-300 hover:text-ink-900 md:inline-flex"
-        aria-label="Notifications"
+        aria-label="Уведомления"
       >
         <Bell className="h-4 w-4" />
       </button>

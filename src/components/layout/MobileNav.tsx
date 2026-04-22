@@ -6,11 +6,11 @@ import { Compass, Heart, Sparkles, Users, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const items = [
-  { href: "/app", label: "Home", icon: Sparkles, exact: true },
-  { href: "/app/wishlist", label: "Lists", icon: Heart },
-  { href: "/app/discover", label: "Discover", icon: Compass },
-  { href: "/app/friends", label: "Friends", icon: Users },
-  { href: "/app/profile", label: "You", icon: UserCircle },
+  { href: "/app", label: "Главная", icon: Sparkles, exact: true },
+  { href: "/app/wishlist", label: "Список", icon: Heart },
+  { href: "/app/discover", label: "Каталог", icon: Compass },
+  { href: "/app/friends", label: "Друзья", icon: Users },
+  { href: "/app/profile", label: "Вы", icon: UserCircle },
 ];
 
 export function MobileNav() {

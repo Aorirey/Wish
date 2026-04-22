@@ -89,7 +89,7 @@ export function ProductCard({
               "inline-flex items-center gap-1 rounded-full border border-ink-200 px-2.5 py-1 text-xs font-medium text-ink-700 transition hover:border-ink-900 hover:bg-ink-950 hover:text-white"
             )}
           >
-            Shop <ArrowUpRight className="h-3.5 w-3.5" />
+            Купить <ArrowUpRight className="h-3.5 w-3.5" />
           </a>
         </div>
 

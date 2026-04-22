@@ -15,13 +15,14 @@ import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 import { friends } from "@/data/friends";
 import { Avatar } from "@/components/ui/Avatar";
+import { pluralizeItems } from "@/lib/utils";
 
 const primaryNav = [
-  { href: "/app", label: "Home", icon: Sparkles, exact: true },
-  { href: "/app/wishlist", label: "My wishlist", icon: Heart },
-  { href: "/app/discover", label: "Discover", icon: Compass },
-  { href: "/app/friends", label: "Friends", icon: Users },
-  { href: "/app/profile", label: "Profile", icon: UserCircle },
+  { href: "/app", label: "Главная", icon: Sparkles, exact: true },
+  { href: "/app/wishlist", label: "Мой вишлист", icon: Heart },
+  { href: "/app/discover", label: "Каталог", icon: Compass },
+  { href: "/app/friends", label: "Друзья", icon: Users },
+  { href: "/app/profile", label: "Профиль", icon: UserCircle },
 ];
 
 export function Sidebar() {
@@ -67,13 +68,13 @@ export function Sidebar() {
       <div className="mt-8 px-1">
         <div className="flex items-center justify-between px-2">
           <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-            Following
+            Вы подписаны
           </p>
           <Link
             href="/app/friends"
             className="text-[11px] font-medium text-ink-500 hover:text-ink-900"
           >
-            All
+            Все
           </Link>
         </div>
         <div className="mt-3 flex flex-col gap-1">
@@ -94,7 +95,7 @@ export function Sidebar() {
                     {f.name.split(" ")[0]}
                   </p>
                   <p className="truncate text-[11px] text-ink-400">
-                    {f.wishlist.length} items
+                    {pluralizeItems(f.wishlist.length)}
                   </p>
                 </div>
               </Link>
@@ -108,16 +109,16 @@ export function Sidebar() {
           <div className="noise opacity-40" />
           <Gift className="h-5 w-5 text-accent-300" />
           <p className="mt-3 font-display text-[17px] leading-snug">
-            Birthday coming up?
+            Скоро день рождения?
           </p>
           <p className="mt-1 text-xs text-ink-200/90">
-            Turn your wishlist into a shareable link your friends can actually use.
+            Превратите свой вишлист в аккуратную ссылку, которой не стыдно поделиться с друзьями.
           </p>
           <Link
             href="/app/profile"
             className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-ink-950 transition hover:bg-accent-500 hover:text-white"
           >
-            Set it up
+            Настроить
           </Link>
         </div>
       </div>

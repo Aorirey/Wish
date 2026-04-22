@@ -6,21 +6,20 @@ import { motion } from "framer-motion";
 import { friends } from "@/data/friends";
 import { products } from "@/data/products";
 import { Avatar } from "@/components/ui/Avatar";
-import { timeAgo } from "@/lib/utils";
+import { pluralizeItems, timeAgo } from "@/lib/utils";
 
 export default function FriendsPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-8 px-4 py-10 md:px-8">
       <header>
         <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
-          Your people
+          Ваши люди
         </p>
         <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
-          Friends, quietly wishing.
+          Друзья, тихо мечтающие.
         </h1>
         <p className="mt-2 text-ink-500">
-          Follow the people whose taste you trust. Their lists are right here
-          when a birthday sneaks up.
+          Подпишитесь на тех, чьему вкусу доверяете. Их списки будут здесь, когда очередной день рождения подкрадётся неожиданно.
         </p>
       </header>
 
@@ -76,11 +75,11 @@ export default function FriendsPage() {
                         </div>
                       ))}
                       <span className="ml-2 text-xs text-ink-500">
-                        {f.wishlist.length} items · {timeAgo(f.lastActive)}
+                        {pluralizeItems(f.wishlist.length)} · {timeAgo(f.lastActive)}
                       </span>
                     </div>
                     <span className="rounded-full border border-ink-200 px-3 py-1 text-xs font-medium text-ink-700 transition group-hover:border-ink-900 group-hover:bg-ink-950 group-hover:text-white">
-                      View list
+                      Открыть список
                     </span>
                   </div>
                 </div>

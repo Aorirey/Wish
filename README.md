@@ -1,76 +1,62 @@
 # Wishly
 
-A small, friendly wishlist web app for keeping the things you love and peeking at
-what your people are saving. Built with Next.js (App Router), TypeScript, Tailwind
-CSS, Framer Motion, and Zustand.
+Небольшое уютное веб‑приложение для вишлистов: вы собираете то, что вам нравится, и подглядываете, о чём мечтают ваши друзья. Next.js (App Router), TypeScript, Tailwind CSS, Framer Motion и Zustand.
 
-![Wishly screenshot](https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&w=1200&q=60)
+## Что внутри
 
-## Feature highlights
+- **Лендинг** — анимированный hero с парящими карточками, блок фич, трендовая подборка и тёплый CTA.
+- **Главная** — приветствие по времени суток, активность друзей, трендовые товары, выбор категории.
+- **Каталог** — поиск + фильтры по категории и диапазону цен, сортировка, sticky‑панель.
+- **Мой вишлист** — приоритеты (Может быть / Скоро / Мечтаю), итоговая сумма, share / копирование ссылки.
+- **Друзья** и детальная страница каждого друга с тихой бронью подарков.
+- **Карточка товара** — теги, ссылка в магазин, «тоже сохранили», похожие.
+- **Профиль** — имя, ник, био и акцентный цвет, с живым превью.
 
-- **Curated landing page** — animated hero, trending showcase, and a warm call‑to‑action.
-- **Home feed** — friend activity, trending products, and category discovery.
-- **Discover** — search + filter by category and price bucket, with sort options.
-- **Wishlist** — priority tagging (Maybe / Soon / Dreaming), totals, share link.
-- **Friends** — follow list, themed profiles, and per‑friend wishlists with quiet
-  gift reservations.
-- **Product detail** — store link, tags, related items, and "also saved by" social proof.
-- **Profile** — editable identity with accent color theming, persisted locally.
-- **Real products, real stores** — ~30 items across Apple, Sony, Patagonia, Uniqlo,
-  Sephora, LEGO, Hay, Fujifilm, and more, with approximate US retail prices.
+## Российские товары, цены и магазины
 
-State is persisted in `localStorage` via Zustand — no server or database required.
+Каталог содержит ~30 товаров в 8 категориях (Техника, Мода, Дом, Красота, Книги, Спорт, Кухня, Музыка) со ссылками на карточки или поиск в **Яндекс Маркете, re:Store, DNS, М.Видео, Ситилинк, OZON, Мегамаркет, Lamoda, Спортмастер, Золотом Яблоке, Hoff, Подписных изданиях, Читай‑городе, Tasty Coffee, Pult.ru, Мире Кубиков, ONYX BOOX**. Цены указаны приблизительно в рублях и отражают ценники в соответствующих магазинах.
 
-## Run it locally
+## Запуск
 
 ```bash
 npm install
 npm run dev
-# open http://localhost:3000
+# http://localhost:3000
 ```
 
-Production build:
+Продакшн‑сборка:
 
 ```bash
 npm run build
 npm run start
 ```
 
-## Project structure
+## Структура
 
 ```
 src/
-  app/                 # Next.js App Router pages
-    page.tsx           # Landing page
-    app/               # The authenticated-feeling app shell
-      page.tsx         # Home
-      wishlist/        # My wishlist
-      discover/        # Catalog with filters
-      friends/         # Friends index + detail
-      product/[id]/    # Product detail
-      profile/         # Profile editor
-  components/
-    layout/            # Sidebar, TopBar, MobileNav
-    product/           # ProductCard, HeartButton
-    ui/                # Avatar, Logo, Toaster
-  data/                # Product catalog and friend fixtures
-  store/               # Zustand stores (wishlist + profile)
-  lib/                 # Utilities (formatPrice, timeAgo, cn)
+  app/                 # App Router
+    page.tsx           # Лендинг
+    app/               # Оболочка приложения
+      page.tsx         # Главная
+      wishlist/        # Мой вишлист
+      discover/        # Каталог
+      friends/         # Список друзей + /[id]
+      product/[id]/    # Карточка товара
+      profile/         # Профиль
+  components/          # UI, layout, продуктовые компоненты
+  data/                # Каталог товаров и друзья (фикстуры)
+  store/               # Zustand store (wishlist + profile)
+  lib/                 # Утилиты (formatPrice в ₽, timeAgo на русском)
 ```
 
-## Design notes
+## Дизайн
 
-- Typography pairs Inter for UI with Fraunces for display, giving the app a
-  quiet editorial voice instead of a generic SaaS look.
-- The accent color (`accent-500`) is used sparingly — reserved for the heart
-  state, CTAs, and the handwritten underline on the hero. Everything else
-  leans on a soft ink palette.
-- Motion is intentional and short: 400–700ms with a custom spring for layout
-  and a `cubic-bezier(.22,1,.36,1)` for image reveals. Nothing moves without a
-  reason.
-- All imagery is pulled from Unsplash with deterministic URLs so the catalog
-  looks coherent without a CMS.
+- Типографика: Inter для интерфейса, Lora для заголовков. Обе имеют кириллический набор.
+- Акцентный цвет используется экономно: сердечко, CTA и подчёркивание в hero.
+- Анимации короткие (≤700 мс), `layoutId` для подсветки активного пункта сайдбара.
+- Состояние хранится локально в браузере — бекенда не требуется.
 
 ## License
 
-MIT. Do whatever makes you happy.
+MIT.

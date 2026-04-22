@@ -32,7 +32,7 @@ export default function ProductPage({
         href="/app/discover"
         className="inline-flex items-center gap-1 text-sm text-ink-500 transition hover:text-ink-900"
       >
-        <ArrowLeft className="h-4 w-4" /> Back
+        <ArrowLeft className="h-4 w-4" /> Назад
       </Link>
 
       <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
@@ -106,7 +106,7 @@ export default function ProductPage({
               rel="noreferrer noopener"
               className="btn-primary"
             >
-              <Store className="h-4 w-4" /> Shop at {product!.store}{" "}
+              <Store className="h-4 w-4" /> Купить в {product!.store}{" "}
               <ArrowUpRight className="h-4 w-4" />
             </a>
           </div>
@@ -115,9 +115,9 @@ export default function ProductPage({
             <div className="flex items-start gap-3">
               <Truck className="mt-0.5 h-4 w-4 text-ink-400" />
               <div>
-                <p className="font-medium text-ink-900">Ships from {product!.store}</p>
+                <p className="font-medium text-ink-900">Доставка из {product!.store}</p>
                 <p className="text-xs text-ink-500">
-                  Prices and stock refreshed regularly.
+                  Цены и наличие обновляются регулярно.
                 </p>
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function ProductPage({
               <div>
                 <p className="font-medium text-ink-900">{product!.brand}</p>
                 <p className="text-xs text-ink-500">
-                  Opens in a new tab. Wishly earns nothing on click.
+                  Открывается в новой вкладке. Wishly ничего не зарабатывает на переходе.
                 </p>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function ProductPage({
           {savedBy.length > 0 && (
             <div className="mt-8 rounded-2xl border border-ink-200/70 bg-white p-5">
               <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-                Also saved by
+                Тоже сохранили
               </p>
               <div className="mt-3 flex items-center gap-3">
                 <div className="flex -space-x-2">
@@ -154,7 +154,7 @@ export default function ProductPage({
                     .slice(0, 2)
                     .map((f) => f.name.split(" ")[0])
                     .join(", ")}
-                  {savedBy.length > 2 && ` and ${savedBy.length - 2} others`}
+                  {savedBy.length > 2 && ` и ещё ${savedBy.length - 2}`}
                 </p>
               </div>
             </div>
@@ -165,7 +165,7 @@ export default function ProductPage({
       {related.length > 0 && (
         <section>
           <h2 className="mb-5 font-display text-2xl font-medium text-ink-950">
-            You might also fall for
+            Вам может понравиться
           </h2>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {related.map((p, i) => (
