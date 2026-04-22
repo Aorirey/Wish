@@ -1,0 +1,94 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { friends } from "@/data/friends";
+import { products } from "@/data/products";
+import { Avatar } from "@/components/ui/Avatar";
+import { timeAgo } from "@/lib/utils";
+
+export default function FriendsPage() {
+  return (
+    <div className="mx-auto max-w-6xl space-y-8 px-4 py-10 md:px-8">
+      <header>
+        <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
+          Your people
+        </p>
+        <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
+          Friends, quietly wishing.
+        </h1>
+        <p className="mt-2 text-ink-500">
+          Follow the people whose taste you trust. Their lists are right here
+          when a birthday sneaks up.
+        </p>
+      </header>
+
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        {friends.map((f, i) => {
+          const preview = f.wishlist
+            .map((id) => products.find((p) => p.id === id))
+            .filter(Boolean)
+            .slice(0, 3) as typeof products;
+          return (
+            <motion.div
+              key={f.id}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05, duration: 0.5 }}
+            >
+              <Link
+                href={`/app/friends/${f.id}`}
+                className="group relative block overflow-hidden rounded-3xl border border-ink-200/70 bg-white shadow-card transition hover:-translate-y-0.5 hover:shadow-[0_24px_60px_-20px_rgba(16,24,40,.18)]"
+              >
+                <div
+                  className="relative flex h-36 items-end overflow-hidden p-5"
+                  style={{ background: `linear-gradient(140deg, ${f.color} 0%, #ffffff 120%)` }}
+                >
+                  <div className="noise opacity-40" />
+                  <div className="relative flex items-center gap-3">
+                    <Avatar src={f.avatar} name={f.name} size={56} ring="#fff" />
+                    <div>
+                      <p className="font-display text-xl font-medium text-ink-950">
+                        {f.name}
+                      </p>
+                      <p className="text-sm text-ink-700/90">@{f.handle}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-5">
+                  <p className="text-sm leading-relaxed text-ink-600">{f.bio}</p>
+                  <div className="mt-5 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {preview.map((p) => (
+                        <div
+                          key={p.id}
+                          className="relative h-12 w-12 overflow-hidden rounded-lg bg-ink-100"
+                          style={{ backgroundColor: p.color }}
+                        >
+                          <Image
+                            src={p.image}
+                            alt=""
+                            fill
+                            sizes="48px"
+                            className="object-cover"
+                          />
+                        </div>
+                      ))}
+                      <span className="ml-2 text-xs text-ink-500">
+                        {f.wishlist.length} items · {timeAgo(f.lastActive)}
+                      </span>
+                    </div>
+                    <span className="rounded-full border border-ink-200 px-3 py-1 text-xs font-medium text-ink-700 transition group-hover:border-ink-900 group-hover:bg-ink-950 group-hover:text-white">
+                      View list
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
