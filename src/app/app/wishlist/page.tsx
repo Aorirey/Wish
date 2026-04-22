@@ -14,11 +14,11 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useWishlist } from "@/store/wishlist";
-import { products } from "@/data/products";
 import { formatPrice, pluralizeItems, timeAgo } from "@/lib/utils";
 import { toast } from "@/components/ui/Toaster";
+import type { Priority } from "@/types/api";
 
-type Filter = "all" | "high" | "medium" | "low";
+type Filter = "all" | Priority;
 
 function Empty() {
   return (
@@ -51,12 +51,10 @@ export default function MyWishlistPage() {
   const [filter, setFilter] = useState<Filter>("all");
   const [copied, setCopied] = useState(false);
 
-  const rows = useMemo(() => {
-    return items
-      .map((i) => ({ ...i, product: products.find((p) => p.id === i.productId)! }))
-      .filter((i) => i.product)
-      .filter((i) => (filter === "all" ? true : i.priority === filter));
-  }, [items, filter]);
+  const rows = useMemo(
+    () => items.filter((i) => (filter === "all" ? true : i.priority === filter)),
+    [items, filter]
+  );
 
   const total = useMemo(
     () => rows.reduce((sum, r) => sum + r.product.price, 0),
@@ -110,13 +108,20 @@ export default function MyWishlistPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => {
-              const url = typeof window !== "undefined" ? window.location.origin + "/app/wishlist" : "";
+              const url =
+                typeof window !== "undefined"
+                  ? window.location.origin + "/app/wishlist"
+                  : "";
               if (typeof navigator !== "undefined" && navigator.clipboard) {
                 navigator.clipboard.writeText(url);
               }
               setCopied(true);
               setTimeout(() => setCopied(false), 1600);
-              toast({ title: "Ссылка скопирована", description: url, tone: "success" });
+              toast({
+                title: "Ссылка скопирована",
+                description: url,
+                tone: "success",
+              });
             }}
             className="btn-outline"
           >
@@ -124,7 +129,12 @@ export default function MyWishlistPage() {
             {copied ? "Скопировано" : "Копировать ссылку"}
           </button>
           <button
-            onClick={() => toast({ title: "Меню шаринга открыто", description: "Теперь список можно отправить кому угодно." })}
+            onClick={() =>
+              toast({
+                title: "Меню шаринга открыто",
+                description: "Теперь список можно отправить кому угодно.",
+              })
+            }
             className="btn-primary"
           >
             <Share2 className="h-4 w-4" /> Поделиться
@@ -143,9 +153,7 @@ export default function MyWishlistPage() {
                 onClick={() => setFilter(f.id)}
                 className={
                   "chip transition " +
-                  (filter === f.id
-                    ? "!border-ink-900 !bg-ink-950 !text-white"
-                    : "")
+                  (filter === f.id ? "!border-ink-900 !bg-ink-950 !text-white" : "")
                 }
               >
                 {f.label}
@@ -158,7 +166,7 @@ export default function MyWishlistPage() {
               {rows.map((row) => (
                 <motion.li
                   layout
-                  key={row.productId}
+                  key={row.product.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6, scale: 0.98 }}
@@ -167,7 +175,7 @@ export default function MyWishlistPage() {
                   <Link
                     href={`/app/product/${row.product.id}`}
                     className="relative h-28 w-24 shrink-0 overflow-hidden rounded-xl bg-ink-100"
-                    style={{ backgroundColor: row.product.color }}
+                    style={{ backgroundColor: row.product.color ?? "#eaeaea" }}
                   >
                     <Image
                       src={row.product.image}
@@ -180,7 +188,7 @@ export default function MyWishlistPage() {
                   <div className="flex min-w-0 flex-1 flex-col">
                     <div className="min-w-0">
                       <p className="truncate text-[11px] uppercase tracking-[0.14em] text-ink-400">
-                        {row.product.brand} · {row.product.store}
+                        {row.product.brand} · {row.product.store.name}
                       </p>
                       <Link
                         href={`/app/product/${row.product.id}`}
@@ -199,7 +207,11 @@ export default function MyWishlistPage() {
                           return (
                             <button
                               key={p}
-                              onClick={() => setPriority(row.productId, p)}
+                              onClick={() =>
+                                setPriority(row.product.id, p).catch(() => {
+                                  toast({ title: "Не получилось обновить" });
+                                })
+                              }
                               className={
                                 "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[11px] transition " +
                                 (active
@@ -219,8 +231,13 @@ export default function MyWishlistPage() {
                         </span>
                         <button
                           onClick={() => {
-                            remove(row.productId);
-                            toast({ title: "Удалено из списка", description: row.product.title });
+                            remove(row.product.id).catch(() =>
+                              toast({ title: "Не получилось удалить" })
+                            );
+                            toast({
+                              title: "Удалено из списка",
+                              description: row.product.title,
+                            });
                           }}
                           aria-label="Удалить"
                           className="rounded-full p-1.5 text-ink-400 hover:bg-accent-50 hover:text-accent-600"

@@ -1,0 +1,95 @@
+// Wishly — модель данных
+// Генератор + SQLite (держим файл рядом с репозиторием, чтобы проще было запустить локально).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id       String    @id
+  label    String
+  emoji    String
+  products Product[]
+}
+
+model Store {
+  id       String    @id
+  name     String
+  website  String
+  products Product[]
+}
+
+model Product {
+  id            String   @id
+  title         String
+  brand         String
+  description   String
+  price         Int // в копейках (лучше хранить целое)
+  originalPrice Int?
+  currency      String   @default("RUB")
+  image         String
+  color         String?
+  tags          String   @default("") // CSV, SQLite не умеет массивы
+  storeUrl      String
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  store   Store  @relation(fields: [storeId], references: [id])
+  storeId String
+
+  wishItems    WishItem[]
+  reservations Reservation[]
+
+  createdAt DateTime @default(now())
+
+  @@index([categoryId])
+  @@index([storeId])
+}
+
+model User {
+  id         String   @id @default(cuid())
+  name       String
+  handle     String   @unique
+  avatar     String?
+  bio        String   @default("")
+  color      String   @default("#ff5d83")
+  isMe       Boolean  @default(false)
+  lastActive DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  wishItems    WishItem[]
+  reservations Reservation[]
+}
+
+model WishItem {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  priority  String   @default("medium") // low | medium | high
+  note      String?
+  addedAt   DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+}
+
+model Reservation {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String // кто забронировал
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  forUserId String // кому (владельцу списка)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId, forUserId])
+}

@@ -5,8 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Принимает ЦЕЛОЕ число рублей. Форматирует в российском стиле: "34 990 ₽".
-export function formatPrice(rub: number, currency: string = "RUB") {
+// Принимает ЦЕЛОЕ число копеек. Форматирует в российском стиле: "34 990 ₽".
+// Копейки отбрасываем для чистого вида цен интернет‑магазинов.
+export function formatPrice(kopecks: number, currency: string = "RUB") {
+  const rub = Math.round(kopecks / 100);
   return new Intl.NumberFormat("ru-RU", {
     style: "currency",
     currency,

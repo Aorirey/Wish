@@ -12,10 +12,9 @@ import {
   Gift,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
-import { cn } from "@/lib/utils";
-import { friends } from "@/data/friends";
+import { cn, pluralizeItems } from "@/lib/utils";
 import { Avatar } from "@/components/ui/Avatar";
-import { pluralizeItems } from "@/lib/utils";
+import type { FriendSummaryDTO } from "@/types/api";
 
 const primaryNav = [
   { href: "/app", label: "Главная", icon: Sparkles, exact: true },
@@ -25,7 +24,7 @@ const primaryNav = [
   { href: "/app/profile", label: "Профиль", icon: UserCircle },
 ];
 
-export function Sidebar() {
+export function Sidebar({ friends }: { friends: FriendSummaryDTO[] }) {
   const pathname = usePathname();
 
   return (
@@ -78,7 +77,7 @@ export function Sidebar() {
           </Link>
         </div>
         <div className="mt-3 flex flex-col gap-1">
-          {friends.slice(0, 5).map((f) => {
+          {friends.map((f) => {
             const active = pathname === `/app/friends/${f.id}`;
             return (
               <Link
@@ -89,13 +88,18 @@ export function Sidebar() {
                   active ? "bg-ink-100" : "hover:bg-ink-100/70"
                 )}
               >
-                <Avatar src={f.avatar} name={f.name} size={30} ring={f.color} />
+                <Avatar
+                  src={f.avatar ?? undefined}
+                  name={f.name}
+                  size={30}
+                  ring={f.color}
+                />
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-ink-900">
                     {f.name.split(" ")[0]}
                   </p>
                   <p className="truncate text-[11px] text-ink-400">
-                    {pluralizeItems(f.wishlist.length)}
+                    {pluralizeItems(f.wishCount)}
                   </p>
                 </div>
               </Link>

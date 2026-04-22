@@ -5,10 +5,13 @@ import { Bell, Search } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { Logo } from "@/components/ui/Logo";
 import { useProfile } from "@/store/wishlist";
-import { me } from "@/data/friends";
+import type { UserDTO } from "@/types/api";
 
-export function TopBar() {
-  const name = useProfile((s) => s.name);
+export function TopBar({ me }: { me: UserDTO }) {
+  const storedName = useProfile((s) => s.name);
+  const hydrated = useProfile((s) => s.hydrated);
+  const name = hydrated ? storedName : me.name;
+
   return (
     <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-ink-200/70 bg-ink-50/80 px-4 py-3 backdrop-blur md:px-6">
       <Link href="/" className="md:hidden">
@@ -40,7 +43,7 @@ export function TopBar() {
         <Bell className="h-4 w-4" />
       </button>
       <Link href="/app/profile" className="hidden md:inline-flex" aria-label={name}>
-        <Avatar src={me.avatar} name={name} size={36} />
+        <Avatar src={me.avatar ?? undefined} name={name} size={36} />
       </Link>
     </header>
   );

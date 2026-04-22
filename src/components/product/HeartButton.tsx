@@ -17,7 +17,7 @@ export function HeartButton({
   size?: "sm" | "md" | "lg";
   className?: string;
 }) {
-  const has = useWishlist((s) => s.has(productId));
+  const has = useWishlist((s) => s.ids.has(productId));
   const hydrated = useWishlist((s) => s.hydrated);
   const toggle = useWishlist((s) => s.toggle);
 
@@ -31,16 +31,23 @@ export function HeartButton({
   return (
     <button
       type="button"
-      onClick={(e) => {
+      onClick={async (e) => {
         e.preventDefault();
         e.stopPropagation();
         const wasOn = has;
-        toggle(productId);
-        toast({
-          title: wasOn ? "Удалено из списка" : "Добавлено в список",
-          description: productTitle,
-          tone: wasOn ? "default" : "success",
-        });
+        try {
+          await toggle(productId, productTitle);
+          toast({
+            title: wasOn ? "Удалено из списка" : "Добавлено в список",
+            description: productTitle,
+            tone: wasOn ? "default" : "success",
+          });
+        } catch {
+          toast({
+            title: "Что-то пошло не так",
+            description: "Попробуйте ещё раз",
+          });
+        }
       }}
       className={cn(
         "group relative inline-flex items-center justify-center rounded-full border bg-white/90 text-ink-700 backdrop-blur transition",

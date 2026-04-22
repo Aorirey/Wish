@@ -1,14 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Check, Trash2 } from "lucide-react";
 import { useProfile, useWishlist } from "@/store/wishlist";
 import { Avatar } from "@/components/ui/Avatar";
-import { me } from "@/data/friends";
 import { toast } from "@/components/ui/Toaster";
-import { products } from "@/data/products";
 import { formatPrice, pluralizeItems } from "@/lib/utils";
 
 const PALETTE = [
@@ -22,18 +20,29 @@ const PALETTE = [
   "#0b0b0b",
 ];
 
+const MY_AVATAR = "https://i.pravatar.cc/160?img=68";
+
 export default function ProfilePage() {
   const profile = useProfile();
+  const wishlist = useWishlist((s) => s.items);
+  const clear = useWishlist((s) => s.clear);
+
   const [draftName, setDraftName] = useState(profile.name);
   const [draftHandle, setDraftHandle] = useState(profile.handle);
   const [draftBio, setDraftBio] = useState(profile.bio);
   const [draftColor, setDraftColor] = useState(profile.color);
-  const wishlist = useWishlist((s) => s.items);
-  const clear = useWishlist((s) => s.clear);
+  const [saving, setSaving] = useState(false);
 
-  const totalValue = wishlist
-    .map((i) => products.find((p) => p.id === i.productId)?.price ?? 0)
-    .reduce((a, b) => a + b, 0);
+  useEffect(() => {
+    if (profile.hydrated) {
+      setDraftName(profile.name);
+      setDraftHandle(profile.handle);
+      setDraftBio(profile.bio);
+      setDraftColor(profile.color);
+    }
+  }, [profile.hydrated, profile.name, profile.handle, profile.bio, profile.color]);
+
+  const totalValue = wishlist.reduce((s, i) => s + i.product.price, 0);
 
   return (
     <div className="mx-auto max-w-4xl space-y-10 px-4 py-10 md:px-8">
@@ -54,12 +63,14 @@ export default function ProfilePage() {
         <div
           aria-hidden
           className="h-32 w-full"
-          style={{ background: `linear-gradient(140deg, ${draftColor} 0%, #ffffff 120%)` }}
+          style={{
+            background: `linear-gradient(140deg, ${draftColor} 0%, #ffffff 120%)`,
+          }}
         />
         <div className="flex flex-col gap-6 px-6 pb-6 md:flex-row md:items-end md:gap-8">
           <div className="-mt-12 flex items-center gap-4">
             <div className="rounded-full border-4 border-white shadow-card">
-              <Avatar src={me.avatar} name={draftName} size={96} />
+              <Avatar src={MY_AVATAR} name={draftName} size={96} />
             </div>
             <div>
               <p className="font-display text-2xl font-medium text-ink-950">
@@ -93,7 +104,9 @@ export default function ProfilePage() {
                 className="input pl-8"
                 value={draftHandle}
                 onChange={(e) =>
-                  setDraftHandle(e.target.value.replace(/[^a-z0-9_]/gi, "").toLowerCase())
+                  setDraftHandle(
+                    e.target.value.replace(/[^a-z0-9_]/gi, "").toLowerCase()
+                  )
                 }
               />
             </div>
@@ -142,22 +155,31 @@ export default function ProfilePage() {
               setDraftColor(profile.color);
             }}
             className="btn-ghost"
+            disabled={saving}
           >
             Сбросить
           </button>
           <button
-            onClick={() => {
-              profile.setProfile({
-                name: draftName,
-                handle: draftHandle,
-                bio: draftBio,
-                color: draftColor,
-              });
-              toast({ title: "Профиль обновлён", tone: "success" });
+            onClick={async () => {
+              setSaving(true);
+              try {
+                await profile.setProfile({
+                  name: draftName,
+                  handle: draftHandle,
+                  bio: draftBio,
+                  color: draftColor,
+                });
+                toast({ title: "Профиль обновлён", tone: "success" });
+              } catch {
+                toast({ title: "Не удалось сохранить" });
+              } finally {
+                setSaving(false);
+              }
             }}
             className="btn-primary"
+            disabled={saving}
           >
-            Сохранить
+            {saving ? "Сохраняем…" : "Сохранить"}
           </button>
         </div>
       </motion.section>
@@ -172,7 +194,7 @@ export default function ProfilePage() {
               {pluralizeItems(wishlist.length)} · {formatPrice(totalValue)}
             </h2>
             <p className="mt-1 text-sm text-ink-500">
-              Хранятся локально в вашем браузере. В любой момент можно выгрузить или очистить.
+              Хранятся в базе данных Wishly. В любой момент можно очистить.
             </p>
           </div>
           <button
@@ -189,19 +211,21 @@ export default function ProfilePage() {
         </div>
         {wishlist.length > 0 && (
           <div className="mt-5 flex flex-wrap gap-2">
-            {wishlist.slice(0, 10).map((i) => {
-              const p = products.find((x) => x.id === i.productId);
-              if (!p) return null;
-              return (
-                <div
-                  key={p.id}
-                  className="relative h-12 w-12 overflow-hidden rounded-lg bg-ink-100"
-                  style={{ backgroundColor: p.color }}
-                >
-                  <Image src={p.image} alt="" fill sizes="48px" className="object-cover" />
-                </div>
-              );
-            })}
+            {wishlist.slice(0, 10).map((i) => (
+              <div
+                key={i.product.id}
+                className="relative h-12 w-12 overflow-hidden rounded-lg bg-ink-100"
+                style={{ backgroundColor: i.product.color ?? "#eaeaea" }}
+              >
+                <Image
+                  src={i.product.image}
+                  alt=""
+                  fill
+                  sizes="48px"
+                  className="object-cover"
+                />
+              </div>
+            ))}
           </div>
         )}
       </section>
