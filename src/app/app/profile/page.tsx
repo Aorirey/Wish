@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Check, Trash2 } from "lucide-react";
+import { Cake, Check, Trash2 } from "lucide-react";
 import { useProfile, useWishlist } from "@/store/wishlist";
-import { Avatar } from "@/components/ui/Avatar";
+import { AvatarUploader } from "@/components/ui/AvatarUploader";
 import { toast } from "@/components/ui/Toaster";
 import { formatPrice, pluralizeItems } from "@/lib/utils";
 
@@ -20,7 +20,27 @@ const PALETTE = [
   "#0b0b0b",
 ];
 
-const MY_AVATAR = "https://i.pravatar.cc/160?img=68";
+// ISO ("2026-04-20T10:00:00.000Z") → "2026-04-20" для input[type=date].
+function toInputDate(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function formatBirthdayRu(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(d);
+}
 
 export default function ProfilePage() {
   const profile = useProfile();
@@ -31,6 +51,7 @@ export default function ProfilePage() {
   const [draftHandle, setDraftHandle] = useState(profile.handle);
   const [draftBio, setDraftBio] = useState(profile.bio);
   const [draftColor, setDraftColor] = useState(profile.color);
+  const [draftBirthday, setDraftBirthday] = useState(toInputDate(profile.birthday));
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -39,10 +60,24 @@ export default function ProfilePage() {
       setDraftHandle(profile.handle);
       setDraftBio(profile.bio);
       setDraftColor(profile.color);
+      setDraftBirthday(toInputDate(profile.birthday));
     }
-  }, [profile.hydrated, profile.name, profile.handle, profile.bio, profile.color]);
+  }, [
+    profile.hydrated,
+    profile.name,
+    profile.handle,
+    profile.bio,
+    profile.color,
+    profile.birthday,
+  ]);
 
   const totalValue = wishlist.reduce((s, i) => s + i.product.price, 0);
+  const dirty =
+    draftName !== profile.name ||
+    draftHandle !== profile.handle ||
+    draftBio !== profile.bio ||
+    draftColor !== profile.color ||
+    draftBirthday !== toInputDate(profile.birthday);
 
   return (
     <div className="mx-auto max-w-4xl space-y-10 px-4 py-10 md:px-8">
@@ -70,13 +105,38 @@ export default function ProfilePage() {
         <div className="flex flex-col gap-6 px-6 pb-6 md:flex-row md:items-end md:gap-8">
           <div className="-mt-12 flex items-center gap-4">
             <div className="rounded-full border-4 border-white shadow-card">
-              <Avatar src={MY_AVATAR} name={draftName} size={96} />
+              <AvatarUploader
+                src={profile.avatar}
+                name={draftName}
+                size={96}
+                onChange={async (url) => {
+                  try {
+                    await profile.setProfile({ avatar: url });
+                    toast({ title: "Фото обновлено", tone: "success" });
+                  } catch {
+                    toast({ title: "Не удалось сохранить фото" });
+                  }
+                }}
+                onClear={async () => {
+                  try {
+                    await profile.setProfile({ avatar: null });
+                    toast({ title: "Фото удалено" });
+                  } catch {
+                    toast({ title: "Не удалось удалить" });
+                  }
+                }}
+              />
             </div>
             <div>
               <p className="font-display text-2xl font-medium text-ink-950">
                 {draftName || "Вы"}
               </p>
               <p className="text-sm text-ink-500">@{draftHandle || "you"}</p>
+              {profile.birthday && (
+                <p className="mt-1 inline-flex items-center gap-1 text-xs text-ink-500">
+                  <Cake className="h-3 w-3" /> {formatBirthdayRu(profile.birthday)}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -111,19 +171,34 @@ export default function ProfilePage() {
               />
             </div>
           </div>
-          <div className="md:col-span-2">
+          <div>
             <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
-              О себе
+              Дата рождения
             </label>
-            <textarea
-              rows={3}
-              className="input mt-2 resize-none"
-              value={draftBio}
-              onChange={(e) => setDraftBio(e.target.value)}
-              placeholder="Пара слов о том, что вы собираете…"
-            />
+            <div className="relative mt-2">
+              <Cake className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400" />
+              <input
+                type="date"
+                className="input pl-9"
+                value={draftBirthday}
+                max={toInputDate(new Date().toISOString())}
+                onChange={(e) => setDraftBirthday(e.target.value)}
+              />
+              {draftBirthday && (
+                <button
+                  type="button"
+                  onClick={() => setDraftBirthday("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ink-500 hover:text-ink-900"
+                >
+                  Очистить
+                </button>
+              )}
+            </div>
+            <p className="mt-1 text-[11px] text-ink-400">
+              Мы используем её только для напоминаний друзьям.
+            </p>
           </div>
-          <div className="md:col-span-2">
+          <div>
             <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
               Акцентный цвет
             </label>
@@ -131,6 +206,7 @@ export default function ProfilePage() {
               {PALETTE.map((c) => (
                 <button
                   key={c}
+                  type="button"
                   onClick={() => setDraftColor(c)}
                   className="relative h-9 w-9 rounded-full border border-ink-200"
                   style={{ backgroundColor: c }}
@@ -145,6 +221,18 @@ export default function ProfilePage() {
               ))}
             </div>
           </div>
+          <div className="md:col-span-2">
+            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+              О себе
+            </label>
+            <textarea
+              rows={3}
+              className="input mt-2 resize-none"
+              value={draftBio}
+              onChange={(e) => setDraftBio(e.target.value)}
+              placeholder="Пара слов о том, что вы собираете…"
+            />
+          </div>
         </div>
         <div className="flex items-center justify-end gap-2 border-t border-ink-200/70 bg-ink-50/70 px-6 py-4">
           <button
@@ -153,9 +241,10 @@ export default function ProfilePage() {
               setDraftHandle(profile.handle);
               setDraftBio(profile.bio);
               setDraftColor(profile.color);
+              setDraftBirthday(toInputDate(profile.birthday));
             }}
             className="btn-ghost"
-            disabled={saving}
+            disabled={saving || !dirty}
           >
             Сбросить
           </button>
@@ -168,6 +257,7 @@ export default function ProfilePage() {
                   handle: draftHandle,
                   bio: draftBio,
                   color: draftColor,
+                  birthday: draftBirthday.length > 0 ? draftBirthday : null,
                 });
                 toast({ title: "Профиль обновлён", tone: "success" });
               } catch {
@@ -177,7 +267,7 @@ export default function ProfilePage() {
               }
             }}
             className="btn-primary"
-            disabled={saving}
+            disabled={saving || !dirty}
           >
             {saving ? "Сохраняем…" : "Сохранить"}
           </button>
@@ -229,6 +319,7 @@ export default function ProfilePage() {
           </div>
         )}
       </section>
+
     </div>
   );
 }

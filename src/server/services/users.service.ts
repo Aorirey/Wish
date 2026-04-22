@@ -18,9 +18,11 @@ export async function getMe(): Promise<UserDTO> {
   return toUserDTO(me);
 }
 
-export async function updateMe(
-  patch: Partial<Pick<UserDTO, "name" | "handle" | "bio" | "color">>
-): Promise<UserDTO> {
+export type UpdateMePatch = Partial<
+  Pick<UserDTO, "name" | "handle" | "bio" | "color" | "avatar" | "birthday">
+>;
+
+export async function updateMe(patch: UpdateMePatch): Promise<UserDTO> {
   const me = await prisma.user.findFirst({ where: { isMe: true } });
   if (!me) throw new Error("No `me` user in database.");
 
@@ -31,15 +33,26 @@ export async function updateMe(
       handle: patch.handle ?? me.handle,
       bio: patch.bio ?? me.bio,
       color: patch.color ?? me.color,
+      avatar: patch.avatar === undefined ? me.avatar : patch.avatar,
+      birthday:
+        patch.birthday === undefined
+          ? me.birthday
+          : patch.birthday === null
+          ? null
+          : new Date(patch.birthday),
     },
   });
   return toUserDTO(updated);
 }
 
 export async function listFriends(): Promise<FriendSummaryDTO[]> {
+  // Только друзья, созданные пользователем (addedById = id me).
+  const me = await prisma.user.findFirst({ where: { isMe: true } });
+  if (!me) return [];
+
   const rows = await prisma.user.findMany({
-    where: { isMe: false },
-    orderBy: { lastActive: "desc" },
+    where: { isMe: false, addedById: me.id },
+    orderBy: { createdAt: "desc" },
     include: {
       wishItems: {
         take: 3,
@@ -59,9 +72,87 @@ export async function listFriends(): Promise<FriendSummaryDTO[]> {
   );
 }
 
+export async function createFriend(input: {
+  name: string;
+  handle?: string;
+  bio?: string;
+  color?: string;
+  avatar?: string | null;
+  birthday?: string | null;
+}): Promise<UserDTO> {
+  const me = await prisma.user.findFirst({ where: { isMe: true } });
+  if (!me) throw new Error("No `me` user in database.");
+
+  const name = input.name.trim();
+  if (name.length < 1) throw new Error("Имя не может быть пустым.");
+
+  // Простая транслитерация кириллицы → латиница, чтобы ник был читаемым.
+  const translit = (s: string) => {
+    const map: Record<string, string> = {
+      а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "yo",
+      ж: "zh", з: "z", и: "i", й: "i", к: "k", л: "l", м: "m",
+      н: "n", о: "o", п: "p", р: "r", с: "s", т: "t", у: "u",
+      ф: "f", х: "h", ц: "ts", ч: "ch", ш: "sh", щ: "sch",
+      ъ: "", ы: "y", ь: "", э: "e", ю: "yu", я: "ya",
+    };
+    return s
+      .toLowerCase()
+      .split("")
+      .map((ch) => (ch in map ? map[ch] : ch))
+      .join("");
+  };
+
+  // Генерируем уникальный handle.
+  const rawHandle = input.handle ?? translit(name);
+  const base =
+    rawHandle
+      .toLowerCase()
+      .replace(/[^a-z0-9_]+/g, "_")
+      .replace(/^_+|_+$/g, "")
+      .slice(0, 24) || "friend";
+
+  let handle = base;
+  let suffix = 1;
+  // Цикл: пока занят — добавляем число.
+  while (await prisma.user.findUnique({ where: { handle } })) {
+    suffix += 1;
+    handle = `${base}_${suffix}`;
+    if (suffix > 200) throw new Error("Не удалось подобрать свободный ник.");
+  }
+
+  const created = await prisma.user.create({
+    data: {
+      name,
+      handle,
+      bio: input.bio ?? "",
+      color: input.color ?? "#c2d6ff",
+      avatar: input.avatar ?? null,
+      birthday:
+        input.birthday && input.birthday.length > 0
+          ? new Date(input.birthday)
+          : null,
+      addedById: me.id,
+    },
+  });
+
+  return toUserDTO(created);
+}
+
+export async function deleteFriend(id: string): Promise<void> {
+  const me = await prisma.user.findFirst({ where: { isMe: true } });
+  if (!me) throw new Error("No `me` user in database.");
+  // Удаляем только тех, кого создал текущий пользователь.
+  await prisma.user.deleteMany({
+    where: { id, addedById: me.id, isMe: false },
+  });
+}
+
 export async function getFriend(id: string) {
+  const me = await prisma.user.findFirst({ where: { isMe: true } });
   const user = await prisma.user.findUnique({ where: { id } });
   if (!user || user.isMe) return null;
+  // Только свои добавленные друзья.
+  if (me && user.addedById !== me.id) return null;
 
   const wishItems = await prisma.wishItem.findMany({
     where: { userId: id },
@@ -78,8 +169,11 @@ export async function getFriend(id: string) {
 }
 
 export async function getRecentActivity(limit = 10): Promise<ActivityEventDTO[]> {
+  const me = await prisma.user.findFirst({ where: { isMe: true } });
   const rows = await prisma.wishItem.findMany({
-    where: { user: { isMe: false } },
+    where: me
+      ? { user: { isMe: false, addedById: me.id } }
+      : { user: { isMe: false } },
     orderBy: { addedAt: "desc" },
     take: limit,
     include: {

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, Heart, Sparkles, Users, UserCircle } from "lucide-react";
+import { Compass, Heart, Sparkles, Users, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const items = [
@@ -10,7 +10,7 @@ const items = [
   { href: "/app/wishlist", label: "Список", icon: Heart },
   { href: "/app/discover", label: "Каталог", icon: Compass },
   { href: "/app/friends", label: "Друзья", icon: Users },
-  { href: "/app/profile", label: "Вы", icon: UserCircle },
+  { href: "/app/friends/new", label: "Добавить", icon: UserPlus },
 ];
 
 export function MobileNav() {

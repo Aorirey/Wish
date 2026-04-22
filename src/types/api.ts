@@ -38,6 +38,7 @@ export type UserDTO = {
   avatar: string | null;
   bio: string;
   color: string;
+  birthday: string | null; // ISO или null
   isMe: boolean;
   lastActive: string;
 };

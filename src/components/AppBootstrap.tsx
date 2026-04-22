@@ -22,6 +22,8 @@ export function AppBootstrap({
       handle: me.handle,
       bio: me.bio,
       color: me.color,
+      avatar: me.avatar ?? null,
+      birthday: me.birthday ?? null,
     });
   }, [me, wishlist, hydrateWl, hydrateP]);
 

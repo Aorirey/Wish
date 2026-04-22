@@ -53,15 +53,18 @@ model Product {
 }
 
 model User {
-  id         String   @id @default(cuid())
+  id         String    @id @default(cuid())
   name       String
-  handle     String   @unique
+  handle     String    @unique
   avatar     String?
-  bio        String   @default("")
-  color      String   @default("#ff5d83")
-  isMe       Boolean  @default(false)
-  lastActive DateTime @default(now())
-  createdAt  DateTime @default(now())
+  bio        String    @default("")
+  color      String    @default("#ff5d83")
+  birthday   DateTime?
+  isMe       Boolean   @default(false)
+  // Кто добавил этого друга (NULL для "me")
+  addedById  String?
+  lastActive DateTime  @default(now())
+  createdAt  DateTime  @default(now())
 
   wishItems    WishItem[]
   reservations Reservation[]

@@ -157,10 +157,22 @@ type ProfileState = {
   handle: string;
   bio: string;
   color: string;
+  avatar: string | null;
+  birthday: string | null; // ISO
   hydrated: boolean;
-  hydrate: (p: { id: string; name: string; handle: string; bio: string; color: string }) => void;
+  hydrate: (p: {
+    id: string;
+    name: string;
+    handle: string;
+    bio: string;
+    color: string;
+    avatar: string | null;
+    birthday: string | null;
+  }) => void;
   setProfile: (
-    patch: Partial<Pick<ProfileState, "name" | "handle" | "bio" | "color">>
+    patch: Partial<
+      Pick<ProfileState, "name" | "handle" | "bio" | "color" | "avatar" | "birthday">
+    >
   ) => Promise<void>;
 };
 
@@ -168,8 +180,10 @@ export const useProfile = create<ProfileState>((set, get) => ({
   id: null,
   name: "Вы",
   handle: "you",
-  bio: "Собираю маленькие приятные мелочи.",
+  bio: "",
   color: "#ff5d83",
+  avatar: null,
+  birthday: null,
   hydrated: false,
 
   hydrate: (p) => set({ ...p, hydrated: true }),

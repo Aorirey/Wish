@@ -44,9 +44,12 @@ export default async function AppHome() {
     },
     {
       icon: Sparkles,
-      label: "Подписки",
+      label: "Друзей",
       value: pluralizeFriends(friends.length),
-      sub: "Всегда что-то находят",
+      sub:
+        friends.length === 0
+          ? "Добавьте первого"
+          : "Всегда что-то находят",
     },
     {
       icon: TrendingUp,
@@ -128,6 +131,20 @@ export default async function AppHome() {
               Все друзья
             </Link>
           </div>
+          {activity.length === 0 && (
+            <div className="p-6 text-center text-sm text-ink-500">
+              <p className="mb-3">
+                Пока некого читать. Добавьте кого-то из близких — и здесь будет
+                лента их сохранений.
+              </p>
+              <Link
+                href="/app/friends/new"
+                className="inline-flex items-center gap-1 text-sm font-medium text-ink-900 hover:underline"
+              >
+                Добавить друга →
+              </Link>
+            </div>
+          )}
           <ul className="divide-y divide-ink-200/70">
             {activity.map((e) => (
               <li key={e.id} className="flex items-center gap-3 px-5 py-3">

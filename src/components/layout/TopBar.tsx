@@ -9,8 +9,11 @@ import type { UserDTO } from "@/types/api";
 
 export function TopBar({ me }: { me: UserDTO }) {
   const storedName = useProfile((s) => s.name);
+  const storedAvatar = useProfile((s) => s.avatar);
   const hydrated = useProfile((s) => s.hydrated);
+
   const name = hydrated ? storedName : me.name;
+  const avatar = hydrated ? storedAvatar : me.avatar ?? null;
 
   return (
     <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-ink-200/70 bg-ink-50/80 px-4 py-3 backdrop-blur md:px-6">
@@ -43,7 +46,7 @@ export function TopBar({ me }: { me: UserDTO }) {
         <Bell className="h-4 w-4" />
       </button>
       <Link href="/app/profile" className="hidden md:inline-flex" aria-label={name}>
-        <Avatar src={me.avatar ?? undefined} name={name} size={36} />
+        <Avatar src={avatar} name={name} size={36} />
       </Link>
     </header>
   );

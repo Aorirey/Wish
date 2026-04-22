@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Cake, Gift } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { formatPrice, timeAgo } from "@/lib/utils";
 import { getFriend } from "@/server/services/users.service";
@@ -9,6 +9,29 @@ import { FriendActions } from "@/components/friends/FriendActions";
 import { WishItemList } from "@/components/friends/WishItemList";
 
 export const dynamic = "force-dynamic";
+
+function daysUntilBirthday(iso: string | null): number | null {
+  if (!iso) return null;
+  const b = new Date(iso);
+  if (Number.isNaN(b.getTime())) return null;
+  const now = new Date();
+  const next = new Date(now.getFullYear(), b.getMonth(), b.getDate());
+  if (next < new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
+    next.setFullYear(next.getFullYear() + 1);
+  }
+  const diff = next.getTime() - now.getTime();
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
+function formatBirthday(iso: string | null): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "numeric",
+    month: "long",
+  }).format(d);
+}
 
 export default async function FriendPage({
   params,
@@ -21,6 +44,9 @@ export default async function FriendPage({
   const { user, wishItems } = data;
   const total = wishItems.reduce((s, w) => s + w.product.price, 0);
   const reserved = await getMyReservationsFor(user.id);
+
+  const birthday = formatBirthday(user.birthday);
+  const days = daysUntilBirthday(user.birthday);
 
   return (
     <div className="mx-auto max-w-6xl space-y-10 px-4 py-10 md:px-8">
@@ -53,12 +79,39 @@ export default async function FriendPage({
                 {user.name}
               </h1>
               <p className="mt-1 text-sm text-ink-500">
-                @{user.handle} · был(а) онлайн {timeAgo(user.lastActive)}
+                @{user.handle} · добавлен{" "}
+                {timeAgo(user.lastActive)}
               </p>
-              <p className="mt-3 max-w-md text-ink-600">{user.bio}</p>
+              {user.bio && (
+                <p className="mt-3 max-w-md text-ink-600">{user.bio}</p>
+              )}
+              {birthday && (
+                <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-ink-200 bg-white/80 px-3 py-1 text-xs text-ink-700">
+                  <Cake className="h-3.5 w-3.5 text-accent-600" />
+                  <span>{birthday}</span>
+                  {typeof days === "number" && days >= 0 && (
+                    <span className="text-ink-400">
+                      ·{" "}
+                      {days === 0
+                        ? "сегодня!"
+                        : days === 1
+                        ? "завтра"
+                        : `через ${days} ${
+                            days % 10 === 1 && days % 100 !== 11
+                              ? "день"
+                              : days % 10 >= 2 &&
+                                days % 10 <= 4 &&
+                                (days % 100 < 12 || days % 100 > 14)
+                              ? "дня"
+                              : "дней"
+                          }`}
+                    </span>
+                  )}
+                </p>
+              )}
             </div>
           </div>
-          <FriendActions friendName={user.name} />
+          <FriendActions friendId={user.id} friendName={user.name} />
         </div>
         <div className="relative mt-8 grid grid-cols-3 gap-4 border-t border-ink-200/70 pt-6 text-sm">
           <div>
@@ -88,12 +141,27 @@ export default async function FriendPage({
         </div>
       </section>
 
-      <WishItemList
-        friendId={user.id}
-        friendName={user.name}
-        wishItems={wishItems}
-        initialReserved={reserved}
-      />
+      {wishItems.length === 0 ? (
+        <section className="card flex flex-col items-center gap-4 p-12 text-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-50 text-accent-600">
+            <Gift className="h-6 w-6" />
+          </div>
+          <h2 className="font-display text-2xl font-medium text-ink-950">
+            Список пока пуст
+          </h2>
+          <p className="max-w-md text-sm text-ink-500">
+            {user.name.split(" ")[0]} ещё ничего не добавил(а). Можно отправить
+            пинг-напоминание или заглянуть позже.
+          </p>
+        </section>
+      ) : (
+        <WishItemList
+          friendId={user.id}
+          friendName={user.name}
+          wishItems={wishItems}
+          initialReserved={reserved}
+        />
+      )}
     </div>
   );
 }

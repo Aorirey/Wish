@@ -51,6 +51,7 @@ export function toUserDTO(u: User): UserDTO {
     avatar: u.avatar ?? null,
     bio: u.bio,
     color: u.color,
+    birthday: u.birthday ? u.birthday.toISOString() : null,
     isMe: u.isMe,
     lastActive: u.lastActive.toISOString(),
   };
