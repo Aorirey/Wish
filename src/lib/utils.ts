@@ -5,22 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatPrice(cents: number, currency: string = "USD") {
+// Принимает ЦЕЛОЕ число копеек. Форматирует в российском стиле: "34 990 ₽".
+// Копейки отбрасываем для чистого вида цен интернет‑магазинов.
+export function formatPrice(kopecks: number, currency: string = "RUB") {
+  const rub = Math.round(kopecks / 100);
   return new Intl.NumberFormat("ru-RU", {
     style: "currency",
     currency,
-    maximumFractionDigits: cents % 100 === 0 ? 0 : 2,
-  }).format(cents / 100);
-}
-
-/** Russian plural: 1 товар, 2 товара, 5 товаров */
-export function ruItems(n: number) {
-  const abs = Math.abs(n) % 100;
-  const d = abs % 10;
-  if (abs > 10 && abs < 20) return `${n} товаров`;
-  if (d > 1 && d < 5) return `${n} товара`;
-  if (d === 1) return `${n} товар`;
-  return `${n} товаров`;
+    maximumFractionDigits: 0,
+  }).format(rub);
 }
 
 export function initials(name: string) {
@@ -32,18 +25,34 @@ export function initials(name: string) {
     .toUpperCase();
 }
 
+function pluralRu(n: number, forms: [string, string, string]) {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return forms[0];
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return forms[1];
+  return forms[2];
+}
+
 export function timeAgo(iso: string) {
   const then = new Date(iso).getTime();
   const diff = Date.now() - then;
   const m = Math.floor(diff / 60000);
   if (m < 1) return "только что";
-  if (m < 60) return `${m} мин. назад`;
+  if (m < 60) return `${m} ${pluralRu(m, ["минуту", "минуты", "минут"])} назад`;
   const h = Math.floor(m / 60);
-  if (h < 24) return `${h} ч. назад`;
+  if (h < 24) return `${h} ${pluralRu(h, ["час", "часа", "часов"])} назад`;
   const d = Math.floor(h / 24);
-  if (d < 7) return `${d} дн. назад`;
+  if (d < 7) return `${d} ${pluralRu(d, ["день", "дня", "дней"])} назад`;
   const w = Math.floor(d / 7);
-  if (w < 5) return `${w} нед. назад`;
+  if (w < 5) return `${w} ${pluralRu(w, ["неделю", "недели", "недель"])} назад`;
   const mo = Math.floor(d / 30);
-  return `${mo} мес. назад`;
+  return `${mo} ${pluralRu(mo, ["месяц", "месяца", "месяцев"])} назад`;
+}
+
+export function pluralizeItems(n: number) {
+  return `${n} ${pluralRu(n, ["товар", "товара", "товаров"])}`;
+}
+
+export function pluralizeFriends(n: number) {
+  return `${n} ${pluralRu(n, ["друг", "друга", "друзей"])}`;
 }

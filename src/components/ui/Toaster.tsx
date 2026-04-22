@@ -60,7 +60,7 @@ export function Toaster() {
               )}
             </div>
             <button
-              aria-label="Dismiss"
+              aria-label="Закрыть"
               onClick={() =>
                 setItems((prev) => prev.filter((i) => i.id !== t.id))
               }

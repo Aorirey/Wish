@@ -10,34 +10,50 @@ export function Avatar({
   ring,
   className,
 }: {
-  src?: string;
+  src?: string | null;
   name: string;
   size?: number;
   ring?: string;
   className?: string;
 }) {
+  const hasSrc = typeof src === "string" && src.length > 0;
+  // Цвет пустого состояния — стабильно считаем из имени.
+  const hue =
+    name.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % 360;
+
   return (
     <div
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-ink-200 text-ink-700",
+        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-medium",
         className
       )}
       style={{
         width: size,
         height: size,
-        boxShadow: ring ? `0 0 0 2px ${ring}, 0 0 0 4px rgba(255,255,255,.9)` : undefined,
+        background: hasSrc
+          ? undefined
+          : `linear-gradient(135deg, hsl(${hue} 70% 88%) 0%, hsl(${
+              (hue + 30) % 360
+            } 60% 78%) 100%)`,
+        color: hasSrc ? undefined : `hsl(${hue} 40% 24%)`,
+        fontSize: size * 0.38,
+        boxShadow: ring
+          ? `0 0 0 2px ${ring}, 0 0 0 4px rgba(255,255,255,.9)`
+          : undefined,
       }}
     >
-      {src ? (
+      {hasSrc ? (
         <Image
-          src={src}
+          src={src as string}
           alt={name}
           width={size * 2}
           height={size * 2}
           className="h-full w-full object-cover"
         />
       ) : (
-        <span className="text-xs font-semibold">{initials(name)}</span>
+        <span className="select-none tracking-tight">
+          {initials(name) || "?"}
+        </span>
       )}
     </div>
   );
