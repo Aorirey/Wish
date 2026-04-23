@@ -51,9 +51,10 @@ export function HeartButton({
       }}
       className={cn(
         "group relative inline-flex items-center justify-center rounded-full border bg-white/90 text-ink-700 backdrop-blur transition",
+        "dark:bg-ink-900/80 dark:text-ink-300",
         has
-          ? "border-accent-200 bg-accent-50 text-accent-600"
-          : "border-ink-200 hover:text-accent-600",
+          ? "border-accent-200 bg-accent-50 text-accent-600 dark:border-accent-400/50 dark:bg-accent-500/15 dark:text-accent-300"
+          : "border-ink-200 hover:text-accent-600 dark:border-ink-700 dark:hover:text-accent-300",
         dim,
         className
       )}

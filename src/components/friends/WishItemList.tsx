@@ -49,10 +49,10 @@ export function WishItemList({
   return (
     <section>
       <div className="mb-5 flex items-end justify-between">
-        <h2 className="font-display text-2xl font-medium text-ink-950">
+        <h2 className="font-display text-2xl font-medium text-ink-950 dark:text-white">
           Вишлист: {firstName}
         </h2>
-        <p className="text-xs text-ink-400">
+        <p className="text-xs text-ink-400 dark:text-ink-500">
           Забронируйте подарок, чтобы никто не повторился.
         </p>
       </div>
@@ -72,7 +72,7 @@ export function WishItemList({
                     "w-full rounded-full border px-3 py-2 text-xs font-medium transition " +
                     (isReserved
                       ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                      : "border-ink-200 bg-white text-ink-700 hover:border-ink-900 hover:bg-ink-950 hover:text-white")
+                      : "border-ink-200 bg-white text-ink-700 hover:border-ink-900 hover:bg-ink-950 hover:text-white dark:border-ink-700 dark:bg-ink-900 dark:text-ink-300 dark:hover:border-white dark:hover:bg-white dark:hover:text-ink-950")
                   }
                 >
                   {isReserved ? "Забронировано вами" : "Забронировать подарок"}

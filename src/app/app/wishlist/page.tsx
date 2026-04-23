@@ -30,10 +30,10 @@ function Empty() {
       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-50 text-accent-600">
         <Heart className="h-6 w-6" />
       </div>
-      <h2 className="font-display text-2xl font-medium text-ink-950">
+      <h2 className="font-display text-2xl font-medium text-ink-950 dark:text-white">
         Ваш список пока пуст
       </h2>
-      <p className="max-w-md text-sm text-ink-500">
+      <p className="max-w-md text-sm text-ink-500 dark:text-ink-400">
         Нажмите на сердечко рядом с тем, что радует глаз. Начните с того, что купили бы себе в хороший день.
       </p>
       <Link href="/app/discover" className="btn-primary">
@@ -64,11 +64,11 @@ export default function MyWishlistPage() {
   if (!hydrated) {
     return (
       <div className="mx-auto max-w-5xl space-y-4 px-4 py-10 md:px-8">
-        <div className="h-8 w-40 animate-pulse rounded bg-ink-100" />
-        <div className="h-24 animate-pulse rounded-2xl bg-ink-100" />
+        <div className="h-8 w-40 animate-pulse rounded bg-ink-100 dark:bg-ink-800" />
+        <div className="h-24 animate-pulse rounded-2xl bg-ink-100 dark:bg-ink-800" />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-40 animate-pulse rounded-2xl bg-ink-100" />
+            <div key={i} className="h-40 animate-pulse rounded-2xl bg-ink-100 dark:bg-ink-800" />
           ))}
         </div>
       </div>
@@ -95,13 +95,13 @@ export default function MyWishlistPage() {
     <div className="mx-auto max-w-5xl space-y-8 px-4 py-10 md:px-8">
       <header className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400 dark:text-ink-500">
             Ваш список
           </p>
-          <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
+          <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 dark:text-white sm:text-5xl">
             Тихо собираете желания.
           </h1>
-          <p className="mt-2 text-ink-500">
+          <p className="mt-2 text-ink-500 dark:text-ink-400">
             {pluralizeItems(items.length)} · на сумму {formatPrice(total)}.
           </p>
         </div>
@@ -153,7 +153,7 @@ export default function MyWishlistPage() {
                 onClick={() => setFilter(f.id)}
                 className={
                   "chip transition " +
-                  (filter === f.id ? "!border-ink-900 !bg-ink-950 !text-white" : "")
+                  (filter === f.id ? "!border-ink-900 !bg-ink-950 !text-white dark:!border-white dark:!bg-white dark:!text-ink-950" : "")
                 }
               >
                 {f.label}
@@ -174,7 +174,7 @@ export default function MyWishlistPage() {
                 >
                   <Link
                     href={`/app/product/${row.product.id}`}
-                    className="relative h-28 w-24 shrink-0 overflow-hidden rounded-xl bg-ink-100"
+                    className="relative h-28 w-24 shrink-0 overflow-hidden rounded-xl bg-ink-100 dark:bg-ink-800"
                     style={{ backgroundColor: row.product.color ?? "#eaeaea" }}
                   >
                     <Image
@@ -187,16 +187,16 @@ export default function MyWishlistPage() {
                   </Link>
                   <div className="flex min-w-0 flex-1 flex-col">
                     <div className="min-w-0">
-                      <p className="truncate text-[11px] uppercase tracking-[0.14em] text-ink-400">
+                      <p className="truncate text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
                         {row.product.brand} · {row.product.store.name}
                       </p>
                       <Link
                         href={`/app/product/${row.product.id}`}
-                        className="mt-1 line-clamp-2 text-sm font-medium text-ink-900 hover:underline"
+                        className="mt-1 line-clamp-2 text-sm font-medium text-ink-900 dark:text-ink-100 hover:underline"
                       >
                         {row.product.title}
                       </Link>
-                      <p className="mt-1 text-[11px] text-ink-400">
+                      <p className="mt-1 text-[11px] text-ink-400 dark:text-ink-500">
                         Добавлено {timeAgo(row.addedAt)}
                       </p>
                     </div>
@@ -215,8 +215,8 @@ export default function MyWishlistPage() {
                               className={
                                 "inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[11px] transition " +
                                 (active
-                                  ? "border-ink-900 bg-ink-950 text-white"
-                                  : "border-ink-200 text-ink-500 hover:border-ink-300 hover:text-ink-900")
+                                  ? "border-ink-900 bg-ink-950 text-white dark:border-white dark:bg-white dark:text-ink-950"
+                                  : "border-ink-200 text-ink-500 hover:border-ink-300 hover:text-ink-900 dark:border-ink-700 dark:text-ink-400 dark:hover:border-ink-500 dark:hover:text-white")
                               }
                             >
                               {p === "high" && <Sparkles className="h-3 w-3" />}
@@ -226,7 +226,7 @@ export default function MyWishlistPage() {
                         })}
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="font-display text-base font-semibold text-ink-950">
+                        <span className="font-display text-base font-semibold text-ink-950 dark:text-white">
                           {formatPrice(row.product.price)}
                         </span>
                         <button
@@ -240,7 +240,7 @@ export default function MyWishlistPage() {
                             });
                           }}
                           aria-label="Удалить"
-                          className="rounded-full p-1.5 text-ink-400 hover:bg-accent-50 hover:text-accent-600"
+                          className="rounded-full p-1.5 text-ink-400 dark:text-ink-500 hover:bg-accent-50 hover:text-accent-600"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>

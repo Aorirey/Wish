@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Cake, Check, Trash2 } from "lucide-react";
 import { useProfile, useWishlist } from "@/store/wishlist";
 import { AvatarUploader } from "@/components/ui/AvatarUploader";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { toast } from "@/components/ui/Toaster";
 import { formatPrice, pluralizeItems } from "@/lib/utils";
 
@@ -82,10 +83,10 @@ export default function ProfilePage() {
   return (
     <div className="mx-auto max-w-4xl space-y-10 px-4 py-10 md:px-8">
       <header>
-        <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400 dark:text-ink-500">
           Ваш профиль
         </p>
-        <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
+        <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 dark:text-white sm:text-5xl">
           Сделайте его своим.
         </h1>
       </header>
@@ -93,7 +94,7 @@ export default function ProfilePage() {
       <motion.section
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl border border-ink-200/70 bg-white shadow-card"
+        className="relative overflow-hidden rounded-3xl border border-ink-200/70 dark:border-ink-700/60 bg-white shadow-card"
       >
         <div
           aria-hidden
@@ -128,12 +129,12 @@ export default function ProfilePage() {
               />
             </div>
             <div>
-              <p className="font-display text-2xl font-medium text-ink-950">
+              <p className="font-display text-2xl font-medium text-ink-950 dark:text-white">
                 {draftName || "Вы"}
               </p>
-              <p className="text-sm text-ink-500">@{draftHandle || "you"}</p>
+              <p className="text-sm text-ink-500 dark:text-ink-400">@{draftHandle || "you"}</p>
               {profile.birthday && (
-                <p className="mt-1 inline-flex items-center gap-1 text-xs text-ink-500">
+                <p className="mt-1 inline-flex items-center gap-1 text-xs text-ink-500 dark:text-ink-400">
                   <Cake className="h-3 w-3" /> {formatBirthdayRu(profile.birthday)}
                 </p>
               )}
@@ -143,7 +144,7 @@ export default function ProfilePage() {
 
         <div className="grid gap-5 p-6 pt-0 md:grid-cols-2">
           <div>
-            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
               Имя
             </label>
             <input
@@ -153,11 +154,11 @@ export default function ProfilePage() {
             />
           </div>
           <div>
-            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
               Ник
             </label>
             <div className="relative mt-2">
-              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-400">
+              <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-400 dark:text-ink-500">
                 @
               </span>
               <input
@@ -172,11 +173,11 @@ export default function ProfilePage() {
             </div>
           </div>
           <div>
-            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
               Дата рождения
             </label>
             <div className="relative mt-2">
-              <Cake className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400" />
+              <Cake className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400 dark:text-ink-500" />
               <input
                 type="date"
                 className="input pl-9"
@@ -188,18 +189,18 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   onClick={() => setDraftBirthday("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ink-500 hover:text-ink-900"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ink-500 dark:text-ink-400 hover:text-ink-900"
                 >
                   Очистить
                 </button>
               )}
             </div>
-            <p className="mt-1 text-[11px] text-ink-400">
+            <p className="mt-1 text-[11px] text-ink-400 dark:text-ink-500">
               Мы используем её только для напоминаний друзьям.
             </p>
           </div>
           <div>
-            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
               Акцентный цвет
             </label>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -208,7 +209,7 @@ export default function ProfilePage() {
                   key={c}
                   type="button"
                   onClick={() => setDraftColor(c)}
-                  className="relative h-9 w-9 rounded-full border border-ink-200"
+                  className="relative h-9 w-9 rounded-full border border-ink-200 dark:border-ink-700"
                   style={{ backgroundColor: c }}
                   aria-label={`Выбрать цвет ${c}`}
                 >
@@ -222,7 +223,7 @@ export default function ProfilePage() {
             </div>
           </div>
           <div className="md:col-span-2">
-            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+            <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
               О себе
             </label>
             <textarea
@@ -234,7 +235,7 @@ export default function ProfilePage() {
             />
           </div>
         </div>
-        <div className="flex items-center justify-end gap-2 border-t border-ink-200/70 bg-ink-50/70 px-6 py-4">
+        <div className="flex items-center justify-end gap-2 border-t border-ink-200/70 dark:border-ink-700/60 bg-ink-50/70 px-6 py-4 dark:bg-ink-950/60">
           <button
             onClick={() => {
               setDraftName(profile.name);
@@ -275,15 +276,32 @@ export default function ProfilePage() {
       </motion.section>
 
       <section className="card p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
+              Внешний вид
+            </p>
+            <h2 className="mt-1 font-display text-xl font-medium text-ink-950 dark:text-white">
+              Тема
+            </h2>
+            <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
+              Выберите, как должно выглядеть приложение. «Системная» подстраивается под настройки устройства.
+            </p>
+          </div>
+          <ThemeToggle variant="segmented" />
+        </div>
+      </section>
+
+      <section className="card p-6">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
               Ваши данные
             </p>
-            <h2 className="mt-1 font-display text-xl font-medium text-ink-950">
+            <h2 className="mt-1 font-display text-xl font-medium text-ink-950 dark:text-white">
               {pluralizeItems(wishlist.length)} · {formatPrice(totalValue)}
             </h2>
-            <p className="mt-1 text-sm text-ink-500">
+            <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
               Хранятся в базе данных Wishly. В любой момент можно очистить.
             </p>
           </div>
@@ -304,7 +322,7 @@ export default function ProfilePage() {
             {wishlist.slice(0, 10).map((i) => (
               <div
                 key={i.product.id}
-                className="relative h-12 w-12 overflow-hidden rounded-lg bg-ink-100"
+                className="relative h-12 w-12 overflow-hidden rounded-lg bg-ink-100 dark:bg-ink-800"
                 style={{ backgroundColor: i.product.color ?? "#eaeaea" }}
               >
                 <Image

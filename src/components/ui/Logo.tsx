@@ -11,7 +11,7 @@ export function Logo({
 }) {
   return (
     <span className={cn("inline-flex items-center gap-2", className)}>
-      <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-xl bg-ink-950 text-white">
+      <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-xl bg-ink-950 text-white dark:bg-white dark:text-ink-950">
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -30,7 +30,7 @@ export function Logo({
         />
       </span>
       {showWord && (
-        <span className="font-display text-[22px] font-medium tracking-tight text-ink-950">
+        <span className="font-display text-[22px] font-medium tracking-tight text-ink-950 dark:text-white">
           Wishly
         </span>
       )}

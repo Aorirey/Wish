@@ -81,7 +81,7 @@ export function AvatarUploader({
         <button
           type="button"
           onClick={() => onClear()}
-          className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border border-ink-200 bg-white text-ink-600 shadow-card transition hover:border-accent-300 hover:bg-accent-50 hover:text-accent-700"
+          className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border border-ink-200 dark:border-ink-700 bg-white text-ink-600 dark:text-ink-400 shadow-card transition hover:border-accent-300 hover:bg-accent-50 hover:text-accent-700"
           aria-label="Удалить фото"
         >
           <X className="h-3 w-3" />

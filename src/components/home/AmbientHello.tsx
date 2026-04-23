@@ -20,13 +20,13 @@ export function AmbientHello({ fallbackName }: { fallbackName: string }) {
 
   return (
     <div>
-      <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
+      <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400 dark:text-ink-500">
         {greeting}
       </p>
-      <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
+      <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 dark:text-white sm:text-5xl">
         Привет, {firstName}.
       </h1>
-      <p className="mt-3 max-w-xl text-ink-500">
+      <p className="mt-3 max-w-xl text-ink-500 dark:text-ink-400">
         Посмотрите, что сохраняют ваши друзья, и несколько вещей, которые стоит
         рассмотреть.
       </p>

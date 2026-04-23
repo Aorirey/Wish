@@ -18,16 +18,16 @@ export default async function DiscoverPage({
     <div className="mx-auto max-w-6xl space-y-8 px-4 py-10 md:px-8">
       <header className="flex items-end justify-between gap-4">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400 dark:text-ink-500">
             Каталог
           </p>
-          <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
+          <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 dark:text-white sm:text-5xl">
             Настоящие товары из российских магазинов.
           </h1>
         </div>
         <Link
           href="/app"
-          className="hidden text-sm font-medium text-ink-500 hover:text-ink-900 md:block"
+          className="hidden text-sm font-medium text-ink-500 dark:text-ink-400 hover:text-ink-900 md:block"
         >
           На главную
         </Link>

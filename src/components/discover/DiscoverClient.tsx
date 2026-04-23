@@ -91,7 +91,7 @@ export function DiscoverClient({
 
   return (
     <>
-      <div className="sticky top-[56px] z-20 -mx-4 border-b border-ink-200/60 bg-ink-50/80 px-4 py-3 backdrop-blur md:top-[60px] md:mx-0 md:rounded-2xl md:border md:bg-white md:shadow-card">
+      <div className="sticky top-[56px] z-20 -mx-4 border-b border-ink-200/60 dark:border-ink-700/50 bg-ink-50/80 px-4 py-3 backdrop-blur md:top-[60px] md:mx-0 md:rounded-2xl md:border md:bg-white md:shadow-card dark:bg-ink-950/80 md:dark:bg-ink-900 md:dark:shadow-none">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <input
@@ -103,7 +103,7 @@ export function DiscoverClient({
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortBy)}
-              className="hidden rounded-xl border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 focus:border-ink-400 focus:outline-none md:block"
+              className="hidden rounded-xl border border-ink-200 dark:border-ink-700 bg-white px-3 py-2.5 text-sm text-ink-900 dark:text-ink-100 focus:border-ink-400 focus:outline-none md:block"
             >
               <option value="trending">В тренде</option>
               <option value="new">Новые</option>
@@ -121,7 +121,7 @@ export function DiscoverClient({
               onClick={() => setCat("all")}
               className={cn(
                 "chip shrink-0",
-                cat === "all" && "!border-ink-900 !bg-ink-950 !text-white"
+                cat === "all" && "!border-ink-900 !bg-ink-950 !text-white dark:!border-white dark:!bg-white dark:!text-ink-950"
               )}
             >
               Все
@@ -132,13 +132,13 @@ export function DiscoverClient({
                 onClick={() => setCat(c.id)}
                 className={cn(
                   "chip shrink-0",
-                  cat === c.id && "!border-ink-900 !bg-ink-950 !text-white"
+                  cat === c.id && "!border-ink-900 !bg-ink-950 !text-white dark:!border-white dark:!bg-white dark:!text-ink-950"
                 )}
               >
                 <span>{c.emoji}</span>
                 {c.label}
                 {typeof c.productCount === "number" && (
-                  <span className="ml-1 text-ink-400">· {c.productCount}</span>
+                  <span className="ml-1 text-ink-400 dark:text-ink-500">· {c.productCount}</span>
                 )}
               </button>
             ))}
@@ -149,13 +149,13 @@ export function DiscoverClient({
                 onClick={() => setBucket(bucket === b.id ? "all" : b.id)}
                 className={cn(
                   "chip shrink-0",
-                  bucket === b.id && "!border-ink-900 !bg-ink-950 !text-white"
+                  bucket === b.id && "!border-ink-900 !bg-ink-950 !text-white dark:!border-white dark:!bg-white dark:!text-ink-950"
                 )}
               >
                 {b.label}
               </button>
             ))}
-            <span className="ml-auto flex items-center gap-1 text-xs text-ink-400 md:hidden">
+            <span className="ml-auto flex items-center gap-1 text-xs text-ink-400 dark:text-ink-500 md:hidden">
               <SlidersHorizontal className="h-3 w-3" />
               {total} найдено
             </span>
@@ -164,7 +164,7 @@ export function DiscoverClient({
       </div>
 
       {loading && items.length === 0 ? (
-        <div className="flex items-center justify-center py-24 text-ink-400">
+        <div className="flex items-center justify-center py-24 text-ink-400 dark:text-ink-500">
           <Loader2 className="h-5 w-5 animate-spin" />
           <span className="ml-2 text-sm">Загружаем каталог…</span>
         </div>
@@ -174,8 +174,8 @@ export function DiscoverClient({
           animate={{ opacity: 1 }}
           className="card flex flex-col items-center gap-3 p-12 text-center"
         >
-          <p className="font-display text-xl text-ink-950">Ничего не нашлось.</p>
-          <p className="max-w-md text-sm text-ink-500">
+          <p className="font-display text-xl text-ink-950 dark:text-white">Ничего не нашлось.</p>
+          <p className="max-w-md text-sm text-ink-500 dark:text-ink-400">
             Попробуйте другой запрос или ослабьте фильтры по категории и цене.
           </p>
           <button onClick={clearAll} className="btn-outline mt-2">
@@ -190,7 +190,7 @@ export function DiscoverClient({
         </div>
       )}
 
-      <p className="text-center text-xs text-ink-400">
+      <p className="text-center text-xs text-ink-400 dark:text-ink-500">
         Показано {items.length} из {total}. Цены приблизительно соответствуют российской рознице (
         {formatPrice(priceRange.min)} – {formatPrice(priceRange.max)}).
       </p>

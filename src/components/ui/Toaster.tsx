@@ -37,14 +37,14 @@ export function Toaster() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 380, damping: 30 }}
-            className="pointer-events-auto flex max-w-sm items-start gap-3 rounded-2xl border border-ink-200 bg-white px-4 py-3 shadow-card"
+            className="pointer-events-auto flex max-w-sm items-start gap-3 rounded-2xl border border-ink-200 bg-white px-4 py-3 shadow-card dark:border-ink-700 dark:bg-ink-900"
           >
             <div
               className={
                 "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full " +
                 (t.tone === "success"
-                  ? "bg-emerald-100 text-emerald-700"
-                  : "bg-ink-100 text-ink-700")
+                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300"
+                  : "bg-ink-100 text-ink-700 dark:bg-ink-800 dark:text-ink-300")
               }
             >
               {t.tone === "success" ? (
@@ -54,9 +54,13 @@ export function Toaster() {
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-ink-900">{t.title}</p>
+              <p className="text-sm font-medium text-ink-900 dark:text-ink-100">
+                {t.title}
+              </p>
               {t.description && (
-                <p className="mt-0.5 text-xs text-ink-500">{t.description}</p>
+                <p className="mt-0.5 text-xs text-ink-500 dark:text-ink-400">
+                  {t.description}
+                </p>
               )}
             </div>
             <button
@@ -64,7 +68,7 @@ export function Toaster() {
               onClick={() =>
                 setItems((prev) => prev.filter((i) => i.id !== t.id))
               }
-              className="rounded-full p-1 text-ink-400 hover:bg-ink-100 hover:text-ink-700"
+              className="rounded-full p-1 text-ink-400 dark:text-ink-500 hover:bg-ink-100 dark:bg-ink-800 hover:text-ink-700 dark:hover:bg-ink-800 dark:hover:text-ink-100"
             >
               <X className="h-3.5 w-3.5" />
             </button>
