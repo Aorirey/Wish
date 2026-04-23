@@ -7,7 +7,7 @@ services:
     # Build: только зависимости + генерация Prisma Client + билд Next.
     # МИГРАЦИЮ и SEED намеренно НЕ делаем здесь — к этому моменту Postgres
     # может ещё не быть готов (особенно на первом blueprint-деплое).
-    buildCommand: npm ci && npx prisma generate && next build
+    buildCommand: npm ci --include=dev && npm run build
     # Start: сначала ждём БД, применяем схему и сид, потом поднимаем Next.
     # См. scripts/start.js
     startCommand: node scripts/start.js
