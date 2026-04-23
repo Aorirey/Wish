@@ -6,6 +6,11 @@ import { AppBootstrap } from "@/components/AppBootstrap";
 import { listFriends, getMe } from "@/server/services/users.service";
 import { getMyWishlist } from "@/server/services/wishlist.service";
 
+// Внутри оболочки приложения всегда нужен доступ к БД (получаем `me`, вишлист,
+// список друзей). Пререндер на билде без DATABASE_URL не имеет смысла —
+// просим Next рендерить на запросе.
+export const dynamic = "force-dynamic";
+
 export default async function AppLayout({
   children,
 }: {
