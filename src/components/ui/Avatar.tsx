@@ -3,6 +3,11 @@
 import { cn, initials } from "@/lib/utils";
 import Image from "next/image";
 
+// data: URL — Next/Image не умеет, рендерим обычным <img>.
+function isDataUrl(s: string) {
+  return s.startsWith("data:");
+}
+
 export function Avatar({
   src,
   name,
@@ -43,13 +48,22 @@ export function Avatar({
       }}
     >
       {hasSrc ? (
-        <Image
-          src={src as string}
-          alt={name}
-          width={size * 2}
-          height={size * 2}
-          className="h-full w-full object-cover"
-        />
+        isDataUrl(src as string) ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={src as string}
+            alt={name}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <Image
+            src={src as string}
+            alt={name}
+            width={size * 2}
+            height={size * 2}
+            className="h-full w-full object-cover"
+          />
+        )
       ) : (
         <span className="select-none tracking-tight">
           {initials(name) || "?"}
