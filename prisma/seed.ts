@@ -3,11 +3,33 @@ import { SEED_CATEGORIES, SEED_STORES, SEED_PRODUCTS } from "./catalog";
 
 const prisma = new PrismaClient();
 
+// Небольшой retry: если БД только что проснулась, первый коннект может не пройти.
+async function connectWithRetry(attempts = 8, delayMs = 2000) {
+  let lastError: unknown = null;
+  for (let i = 1; i <= attempts; i++) {
+    try {
+      await prisma.$connect();
+      // Smoke-запрос, чтобы убедиться что диалект работает.
+      await prisma.$queryRawUnsafe("SELECT 1");
+      return;
+    } catch (e) {
+      lastError = e;
+      console.warn(
+        `⏳ Waiting for database (attempt ${i}/${attempts})…`,
+        (e as Error).message
+      );
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+  throw lastError;
+}
+
 // Идемпотентный сид: безопасно запускать на каждом деплое.
 // - Каталог (категории / магазины / товары) апсёртится.
 // - Пользователь `u_me` создаётся только если его ещё нет.
 // - Пользовательские данные (друзья, вишлисты, резервации) никогда не трогаются.
 async function main() {
+  await connectWithRetry();
   console.log("📂 Upserting categories…");
   for (const c of SEED_CATEGORIES) {
     await prisma.category.upsert({

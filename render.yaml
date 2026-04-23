@@ -4,13 +4,13 @@ services:
     runtime: node
     plan: free
     region: frankfurt
-    # Сборка:
-    # 1) ставим зависимости
-    # 2) генерируем Prisma клиент
-    # 3) применяем схему к Postgres + сидим каталог (идемпотентно, pre-existing данные не трогаем)
-    # 4) билдим Next
-    buildCommand: npm ci && npx prisma generate && npm run db:deploy && npm run build
-    startCommand: npm run start
+    # Build: только зависимости + генерация Prisma Client + билд Next.
+    # МИГРАЦИЮ и SEED намеренно НЕ делаем здесь — к этому моменту Postgres
+    # может ещё не быть готов (особенно на первом blueprint-деплое).
+    buildCommand: npm ci && npx prisma generate && next build
+    # Start: сначала ждём БД, применяем схему и сид, потом поднимаем Next.
+    # См. scripts/start.js
+    startCommand: node scripts/start.js
     autoDeploy: true
     healthCheckPath: /
     envVars:
