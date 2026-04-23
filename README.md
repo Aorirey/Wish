@@ -92,34 +92,48 @@ prisma/
 | GET    | `/api/reservations/:friendId`          | Что я забронировал у друга                    |
 | POST   | `/api/reservations/:friendId`          | Toggle бронь `{productId}`                    |
 
-## Запуск
+## Запуск локально
+
+Нужен **Postgres 14+**. Самый быстрый способ:
+
+```bash
+# В отдельном терминале
+docker run --name wishly-pg -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:16
+```
+
+Потом:
 
 ```bash
 # 1. Зависимости
 npm install
 
 # 2. Переменные окружения
-cp .env.example .env     # DATABASE_URL="file:./dev.db"
+cp .env.example .env
+# DATABASE_URL="postgresql://postgres:postgres@localhost:5432/wishly?schema=public"
 
-# 3. БД: схема + данные
-npm run db:reset         # = prisma db push --force-reset + npm run db:seed
+# 3. БД: схема + данные (идемпотентно)
+npm run db:deploy
 
 # 4. Старт
 npm run dev              # http://localhost:3000
 ```
 
-Продакшн:
+## Деплой на Render
 
-```bash
-npm run build            # prisma generate + next build
-npm run start
+В репозитории есть `render.yaml` — Blueprint для бесплатного плана. Один клик — и Render создаёт веб-сервис, бесплатный Postgres, прокидывает `DATABASE_URL`, на каждом пуше выполняет миграции + идемпотентный сид.
+
+```
+https://dashboard.render.com/blueprint/new?repo=https://github.com/Aorirey/Wish
 ```
 
-Ещё скрипты:
+См. раздел «Render deploy» ниже.
+
+## Ещё скрипты
 
 ```bash
 npm run db:push          # обновить схему (без потери данных)
-npm run db:seed          # перезаписать данные
+npm run db:seed          # upsert каталога (не трогает пользовательские данные)
+npm run db:reset         # полная перезапись — ТОЛЬКО локально
 ```
 
 ## Что можно проверить
@@ -129,6 +143,52 @@ npm run db:seed          # перезаписать данные
 - В каталоге фильтры сразу летят в `GET /api/products?q=&category=&sort=`.
 - Отредактировать профиль — `PATCH /api/me` с откатом при ошибке.
 - На главной показатели пересчитываются из БД (`getMonthlyStats`, `getHotCategory`).
+
+## Render deploy
+
+### 1. Запушить изменения в GitHub
+
+```bash
+git add render.yaml
+git commit -m "Add Render blueprint"
+git push origin main
+```
+
+### 2. Открыть Blueprint-страницу
+
+```
+https://dashboard.render.com/blueprint/new?repo=https://github.com/Aorirey/Wish
+```
+
+### 3. Что произойдёт
+
+Render прочитает `render.yaml` и создаст:
+
+- **Web Service** `wishly` — Node.js, план Free, регион Frankfurt.
+- **Postgres** `wishly-db` — план Free, регион Frankfurt.
+- `DATABASE_URL` автоматически прокинется в веб-сервис.
+
+### 4. Билд и старт
+
+При каждом пуше Render:
+
+1. `npm ci` — зависимости.
+2. `npx prisma generate` — Prisma клиент.
+3. `npm run db:deploy` — применяет схему к Postgres и сидит каталог (идемпотентно).
+4. `npm run build` — билд Next.
+5. Старт: `next start -p $PORT -H 0.0.0.0`.
+
+### 5. Что проверить после первого деплоя
+
+- Открыть `https://<your-service>.onrender.com/` — должен быть лендинг.
+- Перейти в `/app` — товаров 210, друзей 0.
+- В профиле загрузить аватарку — сохранится в БД как data URL.
+- Добавить друга — создастся в Postgres.
+
+### Особенности плана Free
+
+- Сервис **засыпает через 15 минут бездействия**. Первый запрос после простоя разбудит его за ~30 секунд.
+- Postgres Free **удаляется через 30 дней** с момента создания — это ограничение Render. Если нужна постоянная БД, переключите `wishly-db` на план Basic ($7/мес).
 
 ## License
 

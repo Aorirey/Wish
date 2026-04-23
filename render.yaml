@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: wishly
+    runtime: node
+    plan: free
+    region: frankfurt
+    # Сборка:
+    # 1) ставим зависимости
+    # 2) генерируем Prisma клиент
+    # 3) применяем схему к Postgres + сидим каталог (идемпотентно, pre-existing данные не трогаем)
+    # 4) билдим Next
+    buildCommand: npm ci && npx prisma generate && npm run db:deploy && npm run build
+    startCommand: npm run start
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: wishly-db
+          property: connectionString
+
+databases:
+  - name: wishly-db
+    databaseName: wishly
+    plan: free
+    region: frankfurt
