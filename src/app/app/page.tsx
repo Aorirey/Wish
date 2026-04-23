@@ -74,16 +74,16 @@ export default async function AppHome() {
           const Icon = c.icon;
           return (
             <div key={c.label} className="card p-4">
-              <div className="flex items-center gap-2 text-ink-500">
+              <div className="flex items-center gap-2 text-ink-500 dark:text-ink-400">
                 <Icon className="h-3.5 w-3.5" />
                 <span className="text-[11px] uppercase tracking-[0.14em]">
                   {c.label}
                 </span>
               </div>
-              <p className="mt-3 font-display text-xl font-medium text-ink-950">
+              <p className="mt-3 font-display text-xl font-medium text-ink-950 dark:text-white">
                 {c.value}
               </p>
-              <p className="mt-0.5 text-xs text-ink-400">{c.sub}</p>
+              <p className="mt-0.5 text-xs text-ink-400 dark:text-ink-500">{c.sub}</p>
             </div>
           );
         })}
@@ -93,16 +93,16 @@ export default async function AppHome() {
         <section>
           <div className="mb-4 flex items-end justify-between">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
                 В тренде у ваших друзей
               </p>
-              <h2 className="mt-1 font-display text-2xl font-medium text-ink-950">
+              <h2 className="mt-1 font-display text-2xl font-medium text-ink-950 dark:text-white">
                 Объективно хороший вкус
               </h2>
             </div>
             <Link
               href="/app/discover"
-              className="inline-flex items-center gap-1 text-sm font-medium text-ink-700 hover:text-ink-950"
+              className="inline-flex items-center gap-1 text-sm font-medium text-ink-700 dark:text-ink-300 hover:text-ink-950"
             >
               Все товары <ArrowRight className="h-4 w-4" />
             </Link>
@@ -115,37 +115,37 @@ export default async function AppHome() {
         </section>
 
         <div className="card overflow-hidden">
-          <div className="flex items-center justify-between border-b border-ink-200/70 px-5 py-4">
+          <div className="flex items-center justify-between border-b border-ink-200/70 dark:border-ink-700/60 px-5 py-4">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
                 Активность друзей
               </p>
-              <p className="mt-1 font-display text-lg font-medium text-ink-950">
+              <p className="mt-1 font-display text-lg font-medium text-ink-950 dark:text-white">
                 Свежие сохранения
               </p>
             </div>
             <Link
               href="/app/friends"
-              className="text-xs font-medium text-ink-500 hover:text-ink-900"
+              className="text-xs font-medium text-ink-500 dark:text-ink-400 hover:text-ink-900"
             >
               Все друзья
             </Link>
           </div>
           {activity.length === 0 && (
-            <div className="p-6 text-center text-sm text-ink-500">
+            <div className="p-6 text-center text-sm text-ink-500 dark:text-ink-400">
               <p className="mb-3">
                 Пока некого читать. Добавьте кого-то из близких — и здесь будет
                 лента их сохранений.
               </p>
               <Link
                 href="/app/friends/new"
-                className="inline-flex items-center gap-1 text-sm font-medium text-ink-900 hover:underline"
+                className="inline-flex items-center gap-1 text-sm font-medium text-ink-900 dark:text-ink-100 hover:underline"
               >
                 Добавить друга →
               </Link>
             </div>
           )}
-          <ul className="divide-y divide-ink-200/70">
+          <ul className="divide-y divide-ink-200/70 dark:divide-ink-700/60">
             {activity.map((e) => (
               <li key={e.id} className="flex items-center gap-3 px-5 py-3">
                 <Avatar
@@ -155,28 +155,28 @@ export default async function AppHome() {
                   ring={e.user.color}
                 />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm text-ink-700">
+                  <p className="truncate text-sm text-ink-700 dark:text-ink-300">
                     <Link
                       href={`/app/friends/${e.user.id}`}
-                      className="font-medium text-ink-950 hover:underline"
+                      className="font-medium text-ink-950 dark:text-white hover:underline"
                     >
                       {e.user.name.split(" ")[0]}
                     </Link>{" "}
                     сохранил(а){" "}
                     <Link
                       href={`/app/product/${e.product.id}`}
-                      className="font-medium text-ink-950 hover:underline"
+                      className="font-medium text-ink-950 dark:text-white hover:underline"
                     >
                       {e.product.title}
                     </Link>
                   </p>
-                  <p className="mt-0.5 text-xs text-ink-400">
+                  <p className="mt-0.5 text-xs text-ink-400 dark:text-ink-500">
                     {e.product.brand} · {formatPrice(e.product.price)} · {timeAgo(e.when)}
                   </p>
                 </div>
                 <Link
                   href={`/app/product/${e.product.id}`}
-                  className="relative hidden h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-ink-100 sm:block"
+                  className="relative hidden h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-ink-100 dark:bg-ink-800 sm:block"
                   style={{ backgroundColor: e.product.color ?? "#eaeaea" }}
                 >
                   <Image
@@ -195,10 +195,10 @@ export default async function AppHome() {
 
       <section>
         <div className="mb-4">
-          <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+          <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
             По категориям
           </p>
-          <h2 className="mt-1 font-display text-2xl font-medium text-ink-950">
+          <h2 className="mt-1 font-display text-2xl font-medium text-ink-950 dark:text-white">
             Выберите настроение
           </h2>
         </div>
@@ -207,11 +207,11 @@ export default async function AppHome() {
             <Link
               key={c.id}
               href={`/app/discover?c=${c.id}`}
-              className="flex min-w-[140px] flex-col gap-2 rounded-2xl border border-ink-200 bg-white p-4 transition hover:-translate-y-0.5 hover:border-ink-300 hover:shadow-card"
+              className="flex min-w-[140px] flex-col gap-2 rounded-2xl border border-ink-200 dark:border-ink-700 bg-white p-4 transition hover:-translate-y-0.5 hover:border-ink-300 hover:shadow-card"
             >
-              <span className="font-display text-2xl text-ink-500">{c.emoji}</span>
-              <span className="text-sm font-medium text-ink-900">{c.label}</span>
-              <span className="text-[11px] text-ink-400">
+              <span className="font-display text-2xl text-ink-500 dark:text-ink-400">{c.emoji}</span>
+              <span className="text-sm font-medium text-ink-900 dark:text-ink-100">{c.label}</span>
+              <span className="text-[11px] text-ink-400 dark:text-ink-500">
                 {pluralizeItems(c.productCount ?? 0)}
               </span>
             </Link>

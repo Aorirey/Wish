@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Gift, Heart, Link2, Sparkles, Users } from "lucide-react";
 import { useRef } from "react";
 import { Logo } from "@/components/ui/Logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { formatPrice } from "@/lib/utils";
 
 type FloatItem = { id: string; title: string; image: string; color?: string };
@@ -56,7 +57,7 @@ function HeroFloats({ items }: { items: FloatItem[] }) {
                 ease: "easeInOut",
                 delay: i * 0.3,
               }}
-              className="overflow-hidden rounded-2xl border border-ink-200 bg-white shadow-[0_20px_60px_-20px_rgba(16,24,40,.25)]"
+              className="overflow-hidden rounded-2xl border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-900 shadow-[0_20px_60px_-20px_rgba(16,24,40,.25)] dark:shadow-[0_20px_60px_-20px_rgba(0,0,0,.6)]"
               style={{
                 width: pos.size,
                 height: pos.size,
@@ -91,7 +92,7 @@ function Hero({
     <section className="relative overflow-hidden pb-24 pt-10 sm:pt-16">
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 -z-10 h-[640px] bg-[radial-gradient(60%_60%_at_50%_0%,#ffe3ea_0%,transparent_60%)]"
+        className="absolute inset-x-0 top-0 -z-10 h-[640px] bg-[radial-gradient(60%_60%_at_50%_0%,#ffe3ea_0%,transparent_60%)] dark:bg-[radial-gradient(60%_60%_at_50%_0%,rgba(255,93,131,0.18)_0%,transparent_65%)]"
       />
       <div className="noise -z-10" />
       <div className="mx-auto flex max-w-6xl flex-col items-center px-6 text-center">
@@ -109,7 +110,7 @@ function Hero({
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.7 }}
-          className="font-display text-[44px] font-medium leading-[1.02] tracking-tight text-ink-950 sm:text-6xl md:text-7xl"
+          className="font-display text-[44px] font-medium leading-[1.02] tracking-tight text-ink-950 dark:text-white sm:text-6xl md:text-7xl"
         >
           Списки, которыми
           <span className="relative inline-block px-2">
@@ -139,7 +140,7 @@ function Hero({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.6 }}
-          className="mt-6 max-w-xl text-pretty text-base text-ink-500 sm:text-lg"
+          className="mt-6 max-w-xl text-pretty text-base text-ink-500 dark:text-ink-400 sm:text-lg"
         >
           Wishly — уютное место, где можно собрать всё, что вам нравится, и заглянуть в мечты своих близких. Товары из реальных российских магазинов с настоящими ценами.
         </motion.p>
@@ -162,7 +163,7 @@ function Hero({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="mt-8 flex items-center gap-3 text-sm text-ink-500"
+          className="mt-8 flex items-center gap-3 text-sm text-ink-500 dark:text-ink-400"
         >
           <div className="flex -space-x-2">
             {friendAvatars.map((src, i) => (
@@ -181,7 +182,7 @@ function Hero({
             ))}
           </div>
           <span>
-            <span className="font-medium text-ink-900">
+            <span className="font-medium text-ink-900 dark:text-ink-100">
               {adds.toLocaleString("ru-RU")}
             </span>{" "}
             сохранений в базе
@@ -232,10 +233,10 @@ function Features() {
   return (
     <section ref={ref} className="relative mx-auto max-w-6xl px-6 py-24">
       <motion.div style={{ y }} className="mb-16 max-w-2xl">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400 dark:text-ink-500">
           Что внутри
         </p>
-        <h2 className="mt-3 font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
+        <h2 className="mt-3 font-display text-4xl font-medium tracking-tight text-ink-950 dark:text-white sm:text-5xl">
           Вишлисты, похожие на{" "}
           <span className="italic text-accent-600">любовное письмо</span>, а не на
           табличку.
@@ -254,13 +255,13 @@ function Features() {
               transition={{ delay: i * 0.06, duration: 0.6 }}
               className="card flex h-full flex-col gap-4 p-6"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink-950 text-white">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink-950 text-white dark:bg-white dark:text-ink-950">
                 <Icon className="h-4 w-4" />
               </div>
-              <h3 className="font-display text-lg font-medium text-ink-950">
+              <h3 className="font-display text-lg font-medium text-ink-950 dark:text-white">
                 {it.title}
               </h3>
-              <p className="text-sm leading-relaxed text-ink-500">{it.body}</p>
+              <p className="text-sm leading-relaxed text-ink-500 dark:text-ink-400">{it.body}</p>
             </motion.div>
           );
         })}
@@ -271,20 +272,20 @@ function Features() {
 
 function Showcase({ items }: { items: ShowcaseItem[] }) {
   return (
-    <section className="relative border-y border-ink-200/70 bg-white py-20">
+    <section className="relative border-y border-ink-200/70 dark:border-ink-700/60 bg-white dark:bg-ink-950 py-20">
       <div className="mx-auto max-w-6xl px-6">
         <div className="mb-10 flex items-end justify-between gap-4">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400 dark:text-ink-500">
               Сейчас в тренде
             </p>
-            <h2 className="mt-2 font-display text-3xl font-medium tracking-tight text-ink-950 sm:text-4xl">
+            <h2 className="mt-2 font-display text-3xl font-medium tracking-tight text-ink-950 dark:text-white sm:text-4xl">
               Что сохраняет сообщество
             </h2>
           </div>
           <Link
             href="/app/discover"
-            className="hidden items-center gap-1 text-sm font-medium text-ink-700 hover:text-ink-950 sm:inline-flex"
+            className="hidden items-center gap-1 text-sm font-medium text-ink-700 dark:text-ink-300 hover:text-ink-950 sm:inline-flex"
           >
             Смотреть всё <ArrowRight className="h-4 w-4" />
           </Link>
@@ -299,7 +300,7 @@ function Showcase({ items }: { items: ShowcaseItem[] }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-5%" }}
               transition={{ delay: i * 0.05, duration: 0.6 }}
-              className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-ink-100"
+              className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-ink-100 dark:bg-ink-800"
               style={{ backgroundColor: p.color }}
             >
               <Image
@@ -325,7 +326,7 @@ function Showcase({ items }: { items: ShowcaseItem[] }) {
 function CTA({ products, stores }: { products: number; stores: number }) {
   return (
     <section className="mx-auto max-w-6xl px-6 py-24">
-      <div className="relative overflow-hidden rounded-3xl border border-ink-200 bg-gradient-to-br from-ink-950 via-ink-900 to-ink-800 p-10 text-white sm:p-16">
+      <div className="relative overflow-hidden rounded-3xl border border-ink-200 dark:border-ink-700 bg-gradient-to-br from-ink-950 via-ink-900 to-ink-800 p-10 text-white sm:p-16">
         <div className="noise opacity-30" />
         <div
           aria-hidden
@@ -343,7 +344,7 @@ function CTA({ products, stores }: { products: number; stores: number }) {
           <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
             <Link
               href="/app"
-              className="btn bg-white text-ink-950 hover:bg-accent-500 hover:text-white"
+              className="btn bg-white text-ink-950 dark:text-white hover:bg-accent-500 hover:text-white"
             >
               Начать свой список <ArrowRight className="h-4 w-4" />
             </Link>
@@ -359,26 +360,26 @@ function CTA({ products, stores }: { products: number; stores: number }) {
 
 function Footer() {
   return (
-    <footer className="border-t border-ink-200/70 bg-white/60">
+    <footer className="border-t border-ink-200/70 dark:border-ink-700/60 bg-white/60 dark:bg-ink-950/60">
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 px-6 py-12 sm:flex-row sm:items-center">
         <div>
           <Logo />
-          <p className="mt-3 max-w-sm text-sm text-ink-500">
+          <p className="mt-3 max-w-sm text-sm text-ink-500 dark:text-ink-400">
             Сделано с любовью в однокомнатной студии. © {new Date().getFullYear()}{" "}
             Wishly.
           </p>
         </div>
-        <nav className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-500">
-          <Link href="/app" className="hover:text-ink-950">
+        <nav className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-ink-500 dark:text-ink-400">
+          <Link href="/app" className="hover:text-ink-950 dark:text-white">
             Приложение
           </Link>
-          <Link href="/app/discover" className="hover:text-ink-950">
+          <Link href="/app/discover" className="hover:text-ink-950 dark:text-white">
             Каталог
           </Link>
-          <Link href="/app/friends" className="hover:text-ink-950">
+          <Link href="/app/friends" className="hover:text-ink-950 dark:text-white">
             Друзья
           </Link>
-          <a href="mailto:hi@wishly.app" className="hover:text-ink-950">
+          <a href="mailto:hi@wishly.app" className="hover:text-ink-950 dark:text-white">
             Контакты
           </a>
         </nav>
@@ -403,20 +404,23 @@ export function LandingClient({
       <header className="absolute inset-x-0 top-0 z-20">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <Logo />
-          <nav className="hidden items-center gap-8 text-sm text-ink-600 md:flex">
-            <Link href="/app/discover" className="hover:text-ink-950">
+          <nav className="hidden items-center gap-8 text-sm text-ink-600 dark:text-ink-300 md:flex">
+            <Link href="/app/discover" className="hover:text-ink-950 dark:hover:text-white">
               Каталог
             </Link>
-            <Link href="/app/friends" className="hover:text-ink-950">
+            <Link href="/app/friends" className="hover:text-ink-950 dark:hover:text-white">
               Друзья
             </Link>
-            <Link href="#features" className="hover:text-ink-950">
+            <Link href="#features" className="hover:text-ink-950 dark:hover:text-white">
               Как это работает
             </Link>
           </nav>
-          <Link href="/app" className="btn-primary !py-2 text-xs">
-            Открыть приложение <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          <div className="flex items-center gap-2">
+            <ThemeToggle variant="compact" />
+            <Link href="/app" className="btn-primary !py-2 text-xs">
+              Открыть приложение <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
       </header>
       <Hero floats={floats} friendAvatars={friendAvatars} adds={stats.adds} />

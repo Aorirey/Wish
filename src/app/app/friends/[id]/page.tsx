@@ -52,12 +52,12 @@ export default async function FriendPage({
     <div className="mx-auto max-w-6xl space-y-10 px-4 py-10 md:px-8">
       <Link
         href="/app/friends"
-        className="inline-flex items-center gap-1 text-sm text-ink-500 transition hover:text-ink-900"
+        className="inline-flex items-center gap-1 text-sm text-ink-500 dark:text-ink-400 transition hover:text-ink-900"
       >
         <ArrowLeft className="h-4 w-4" /> Все друзья
       </Link>
 
-      <section className="relative overflow-hidden rounded-3xl border border-ink-200/70 bg-white p-8 shadow-card">
+      <section className="relative overflow-hidden rounded-3xl border border-ink-200/70 dark:border-ink-700/60 bg-white p-8 shadow-card">
         <div
           aria-hidden
           className="absolute inset-x-0 top-0 h-40"
@@ -75,22 +75,22 @@ export default async function FriendPage({
               ring="#fff"
             />
             <div>
-              <h1 className="font-display text-4xl font-medium tracking-tight text-ink-950 sm:text-5xl">
+              <h1 className="font-display text-4xl font-medium tracking-tight text-ink-950 dark:text-white sm:text-5xl">
                 {user.name}
               </h1>
-              <p className="mt-1 text-sm text-ink-500">
+              <p className="mt-1 text-sm text-ink-500 dark:text-ink-400">
                 @{user.handle} · добавлен{" "}
                 {timeAgo(user.lastActive)}
               </p>
               {user.bio && (
-                <p className="mt-3 max-w-md text-ink-600">{user.bio}</p>
+                <p className="mt-3 max-w-md text-ink-600 dark:text-ink-400">{user.bio}</p>
               )}
               {birthday && (
-                <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-ink-200 bg-white/80 px-3 py-1 text-xs text-ink-700">
+                <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-ink-200 dark:border-ink-700 bg-white/80 px-3 py-1 text-xs text-ink-700 dark:text-ink-300">
                   <Cake className="h-3.5 w-3.5 text-accent-600" />
                   <span>{birthday}</span>
                   {typeof days === "number" && days >= 0 && (
-                    <span className="text-ink-400">
+                    <span className="text-ink-400 dark:text-ink-500">
                       ·{" "}
                       {days === 0
                         ? "сегодня!"
@@ -113,28 +113,28 @@ export default async function FriendPage({
           </div>
           <FriendActions friendId={user.id} friendName={user.name} />
         </div>
-        <div className="relative mt-8 grid grid-cols-3 gap-4 border-t border-ink-200/70 pt-6 text-sm">
+        <div className="relative mt-8 grid grid-cols-3 gap-4 border-t border-ink-200/70 dark:border-ink-700/60 pt-6 text-sm">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
               Товаров
             </p>
-            <p className="mt-1 font-display text-2xl font-medium text-ink-950">
+            <p className="mt-1 font-display text-2xl font-medium text-ink-950 dark:text-white">
               {wishItems.length}
             </p>
           </div>
           <div>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
               Сумма списка
             </p>
-            <p className="mt-1 font-display text-2xl font-medium text-ink-950">
+            <p className="mt-1 font-display text-2xl font-medium text-ink-950 dark:text-white">
               {formatPrice(total)}
             </p>
           </div>
           <div>
-            <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
               Вы забронировали
             </p>
-            <p className="mt-1 font-display text-2xl font-medium text-ink-950">
+            <p className="mt-1 font-display text-2xl font-medium text-ink-950 dark:text-white">
               {Object.values(reserved).filter(Boolean).length}
             </p>
           </div>
@@ -146,10 +146,10 @@ export default async function FriendPage({
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-50 text-accent-600">
             <Gift className="h-6 w-6" />
           </div>
-          <h2 className="font-display text-2xl font-medium text-ink-950">
+          <h2 className="font-display text-2xl font-medium text-ink-950 dark:text-white">
             Список пока пуст
           </h2>
-          <p className="max-w-md text-sm text-ink-500">
+          <p className="max-w-md text-sm text-ink-500 dark:text-ink-400">
             {user.name.split(" ")[0]} ещё ничего не добавил(а). Можно отправить
             пинг-напоминание или заглянуть позже.
           </p>

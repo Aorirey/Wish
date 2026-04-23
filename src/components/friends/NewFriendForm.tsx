@@ -72,7 +72,7 @@ export function NewFriendForm() {
   return (
     <form
       onSubmit={submit}
-      className="card divide-y divide-ink-200/70 overflow-hidden"
+      className="card divide-y divide-ink-200/70 dark:divide-ink-700/60 overflow-hidden"
     >
       <div className="flex items-center gap-5 p-6">
         <AvatarUploader
@@ -82,7 +82,7 @@ export function NewFriendForm() {
           onChange={(url) => setAvatar(url)}
           onClear={() => setAvatar(null)}
         />
-        <div className="min-w-0 flex-1 text-sm text-ink-500">
+        <div className="min-w-0 flex-1 text-sm text-ink-500 dark:text-ink-400">
           <p>
             Нажмите на круг, чтобы загрузить фото. Мы принимаем JPG, PNG, WEBP и
             GIF до 3 МБ.
@@ -95,7 +95,7 @@ export function NewFriendForm() {
 
       <div className="grid gap-5 p-6 md:grid-cols-2">
         <div className="md:col-span-2">
-          <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+          <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
             Имя <span className="text-accent-600">*</span>
           </label>
           <input
@@ -109,11 +109,11 @@ export function NewFriendForm() {
           />
         </div>
         <div>
-          <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+          <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
             Ник (опционально)
           </label>
           <div className="relative mt-2">
-            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-400">
+            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-400 dark:text-ink-500">
               @
             </span>
             <input
@@ -127,16 +127,16 @@ export function NewFriendForm() {
               placeholder="mama"
             />
           </div>
-          <p className="mt-1 text-[11px] text-ink-400">
+          <p className="mt-1 text-[11px] text-ink-400 dark:text-ink-500">
             Если оставить пустым — сгенерируем из имени.
           </p>
         </div>
         <div>
-          <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+          <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
             Дата рождения
           </label>
           <div className="relative mt-2">
-            <Cake className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400" />
+            <Cake className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400 dark:text-ink-500" />
             <input
               type="date"
               className="input pl-9"
@@ -147,7 +147,7 @@ export function NewFriendForm() {
           </div>
         </div>
         <div className="md:col-span-2">
-          <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+          <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
             Пара слов о человеке
           </label>
           <textarea
@@ -160,7 +160,7 @@ export function NewFriendForm() {
           />
         </div>
         <div className="md:col-span-2">
-          <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400">
+          <label className="text-[11px] uppercase tracking-[0.14em] text-ink-400 dark:text-ink-500">
             Акцентный цвет карточки
           </label>
           <div className="mt-2 flex flex-wrap gap-2">
@@ -169,7 +169,7 @@ export function NewFriendForm() {
                 type="button"
                 key={c}
                 onClick={() => setColor(c)}
-                className="relative h-9 w-9 rounded-full border border-ink-200"
+                className="relative h-9 w-9 rounded-full border border-ink-200 dark:border-ink-700"
                 style={{ backgroundColor: c }}
                 aria-label={`Выбрать цвет ${c}`}
               >
@@ -184,8 +184,8 @@ export function NewFriendForm() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-2 bg-ink-50/70 px-6 py-4">
-        <p className="text-xs text-ink-400">
+      <div className="flex items-center justify-between gap-2 bg-ink-50/70 px-6 py-4 dark:bg-ink-950/60">
+        <p className="text-xs text-ink-400 dark:text-ink-500">
           После создания вы сможете добавлять подарки в их вишлист.
         </p>
         <div className="flex items-center gap-2">
