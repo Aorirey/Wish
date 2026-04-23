@@ -17,16 +17,16 @@ export function FriendActions({
   const firstName = friendName.split(" ")[0];
 
   const onDelete = async () => {
-    if (!confirm(`Удалить ${friendName} из друзей?`)) return;
+    if (!confirm(`Отписаться от ${friendName}?`)) return;
     setDeleting(true);
     try {
       const res = await fetch(`/api/friends/${friendId}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Fail");
-      toast({ title: "Друг удалён", description: friendName });
+      toast({ title: "Подписка удалена", description: friendName });
       router.push("/app/friends");
       router.refresh();
     } catch {
-      toast({ title: "Не получилось удалить" });
+      toast({ title: "Не получилось отписаться" });
       setDeleting(false);
     }
   };
@@ -60,7 +60,7 @@ export function FriendActions({
         onClick={onDelete}
         disabled={deleting}
         className="btn-ghost text-accent-600 hover:!bg-accent-50"
-        aria-label="Удалить друга"
+        aria-label="Отписаться от друга"
       >
         {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
       </button>

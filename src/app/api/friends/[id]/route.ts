@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { deleteFriend, getFriend } from "@/server/services/users.service";
+import { getFriend, unfollowFriend } from "@/server/services/users.service";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +16,6 @@ export async function DELETE(
   _req: Request,
   { params }: { params: { id: string } }
 ) {
-  await deleteFriend(params.id);
+  await unfollowFriend(params.id);
   return NextResponse.json({ ok: true });
 }

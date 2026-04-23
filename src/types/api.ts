@@ -48,6 +48,10 @@ export type FriendSummaryDTO = UserDTO & {
   previewImages: string[];
 };
 
+export type FriendSearchResultDTO = UserDTO & {
+  isFollowing: boolean;
+};
+
 export type WishItemDTO = {
   id: string;
   product: ProductDTO;

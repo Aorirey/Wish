@@ -68,6 +68,22 @@ model User {
 
   wishItems    WishItem[]
   reservations Reservation[]
+  followers    Follow[]  @relation("FollowTarget")
+  following    Follow[]  @relation("FollowSource")
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("FollowSource", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("FollowTarget", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
 }
 
 model WishItem {

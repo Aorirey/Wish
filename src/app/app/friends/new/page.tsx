@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { NewFriendForm } from "@/components/friends/NewFriendForm";
+import { FriendSearchPanel } from "@/components/friends/FriendSearchPanel";
 
 export default function NewFriendPage() {
   return (
@@ -14,18 +14,18 @@ export default function NewFriendPage() {
 
       <header>
         <p className="text-[11px] uppercase tracking-[0.2em] text-ink-400 dark:text-ink-500">
-          Новый друг
+          Добавить друга
         </p>
         <h1 className="mt-2 font-display text-4xl font-medium tracking-tight text-ink-950 dark:text-white sm:text-5xl">
-          Заведите карточку.
+          Найдите по username.
         </h1>
         <p className="mt-3 max-w-lg text-ink-500 dark:text-ink-400">
-          Минимум — имя. Добавьте дату рождения и фото — Wishly будет напоминать
-          и помогать. Всё остаётся у вас на устройстве.
+          Друг сам настраивает свой профиль и username. Вам нужно только ввести
+          его `@username` и подписаться.
         </p>
       </header>
 
-      <NewFriendForm />
+      <FriendSearchPanel initiallyOpen />
     </div>
   );
 }

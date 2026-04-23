@@ -7,6 +7,7 @@ import {
 } from "@/server/dto";
 import type {
   ActivityEventDTO,
+  FriendSearchResultDTO,
   FriendSummaryDTO,
   UserDTO,
   WishItemDTO,
@@ -46,104 +47,105 @@ export async function updateMe(patch: UpdateMePatch): Promise<UserDTO> {
 }
 
 export async function listFriends(): Promise<FriendSummaryDTO[]> {
-  // Только друзья, созданные пользователем (addedById = id me).
   const me = await prisma.user.findFirst({ where: { isMe: true } });
   if (!me) return [];
 
-  const rows = await prisma.user.findMany({
-    where: { isMe: false, addedById: me.id },
+  const follows = await prisma.follow.findMany({
+    where: { followerId: me.id },
     orderBy: { createdAt: "desc" },
     include: {
-      wishItems: {
-        take: 3,
-        orderBy: { addedAt: "desc" },
-        include: { product: true },
+      following: {
+        include: {
+          wishItems: {
+            take: 3,
+            orderBy: { addedAt: "desc" },
+            include: { product: true },
+          },
+          _count: { select: { wishItems: true } },
+        },
       },
-      _count: { select: { wishItems: true } },
     },
   });
 
-  return rows.map((u) =>
+  return follows.map((f) =>
     toFriendSummaryDTO(
-      u,
-      u._count.wishItems,
-      u.wishItems.map((w) => w.product.image)
+      f.following,
+      f.following._count.wishItems,
+      f.following.wishItems.map((w) => w.product.image)
     )
   );
 }
 
-export async function createFriend(input: {
-  name: string;
-  handle?: string;
-  bio?: string;
-  color?: string;
-  avatar?: string | null;
-  birthday?: string | null;
-}): Promise<UserDTO> {
+export async function searchUsersByHandle(query: string): Promise<FriendSearchResultDTO[]> {
   const me = await prisma.user.findFirst({ where: { isMe: true } });
   if (!me) throw new Error("No `me` user in database.");
 
-  const name = input.name.trim();
-  if (name.length < 1) throw new Error("Имя не может быть пустым.");
+  const normalized = query
+    .trim()
+    .toLowerCase()
+    .replace(/^@+/, "")
+    .replace(/[^a-z0-9_]/g, "");
+  if (normalized.length < 2) return [];
 
-  // Простая транслитерация кириллицы → латиница, чтобы ник был читаемым.
-  const translit = (s: string) => {
-    const map: Record<string, string> = {
-      а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "yo",
-      ж: "zh", з: "z", и: "i", й: "i", к: "k", л: "l", м: "m",
-      н: "n", о: "o", п: "p", р: "r", с: "s", т: "t", у: "u",
-      ф: "f", х: "h", ц: "ts", ч: "ch", ш: "sh", щ: "sch",
-      ъ: "", ы: "y", ь: "", э: "e", ю: "yu", я: "ya",
-    };
-    return s
-      .toLowerCase()
-      .split("")
-      .map((ch) => (ch in map ? map[ch] : ch))
-      .join("");
-  };
+  const rows = await prisma.user.findMany({
+    where: {
+      isMe: false,
+      handle: { contains: normalized, mode: "insensitive" },
+    },
+    orderBy: { lastActive: "desc" },
+    take: 20,
+  });
 
-  // Генерируем уникальный handle.
-  const rawHandle = input.handle ?? translit(name);
-  const base =
-    rawHandle
-      .toLowerCase()
-      .replace(/[^a-z0-9_]+/g, "_")
-      .replace(/^_+|_+$/g, "")
-      .slice(0, 24) || "friend";
+  const followedIds = new Set(
+    (
+      await prisma.follow.findMany({
+        where: { followerId: me.id, followingId: { in: rows.map((r) => r.id) } },
+        select: { followingId: true },
+      })
+    ).map((x) => x.followingId)
+  );
 
-  let handle = base;
-  let suffix = 1;
-  // Цикл: пока занят — добавляем число.
-  while (await prisma.user.findUnique({ where: { handle } })) {
-    suffix += 1;
-    handle = `${base}_${suffix}`;
-    if (suffix > 200) throw new Error("Не удалось подобрать свободный ник.");
-  }
+  return rows.map((u) => ({
+    ...toUserDTO(u),
+    isFollowing: followedIds.has(u.id),
+  }));
+}
 
-  const created = await prisma.user.create({
-    data: {
-      name,
-      handle,
-      bio: input.bio ?? "",
-      color: input.color ?? "#c2d6ff",
-      avatar: input.avatar ?? null,
-      birthday:
-        input.birthday && input.birthday.length > 0
-          ? new Date(input.birthday)
-          : null,
-      addedById: me.id,
+export async function followByHandle(handle: string): Promise<UserDTO> {
+  const me = await prisma.user.findFirst({ where: { isMe: true } });
+  if (!me) throw new Error("No `me` user in database.");
+
+  const normalized = handle
+    .trim()
+    .toLowerCase()
+    .replace(/^@+/, "")
+    .replace(/[^a-z0-9_]/g, "");
+  if (!normalized) throw new Error("Укажите username.");
+
+  const target = await prisma.user.findUnique({
+    where: { handle: normalized },
+  });
+  if (!target || target.isMe) throw new Error("Пользователь не найден.");
+
+  await prisma.follow.upsert({
+    where: {
+      followerId_followingId: { followerId: me.id, followingId: target.id },
+    },
+    update: {},
+    create: {
+      followerId: me.id,
+      followingId: target.id,
     },
   });
 
-  return toUserDTO(created);
+  return toUserDTO(target);
 }
 
-export async function deleteFriend(id: string): Promise<void> {
+export async function unfollowFriend(id: string): Promise<void> {
   const me = await prisma.user.findFirst({ where: { isMe: true } });
   if (!me) throw new Error("No `me` user in database.");
-  // Удаляем только тех, кого создал текущий пользователь.
-  await prisma.user.deleteMany({
-    where: { id, addedById: me.id, isMe: false },
+  await prisma.follow.deleteMany({
+    where: { followerId: me.id, followingId: id },
   });
 }
 
@@ -151,8 +153,14 @@ export async function getFriend(id: string) {
   const me = await prisma.user.findFirst({ where: { isMe: true } });
   const user = await prisma.user.findUnique({ where: { id } });
   if (!user || user.isMe) return null;
-  // Только свои добавленные друзья.
-  if (me && user.addedById !== me.id) return null;
+  if (me) {
+    const isFollowing = await prisma.follow.findUnique({
+      where: {
+        followerId_followingId: { followerId: me.id, followingId: id },
+      },
+    });
+    if (!isFollowing) return null;
+  }
 
   const wishItems = await prisma.wishItem.findMany({
     where: { userId: id },
@@ -170,10 +178,15 @@ export async function getFriend(id: string) {
 
 export async function getRecentActivity(limit = 10): Promise<ActivityEventDTO[]> {
   const me = await prisma.user.findFirst({ where: { isMe: true } });
+  if (!me) return [];
+  const followRows = await prisma.follow.findMany({
+    where: { followerId: me.id },
+    select: { followingId: true },
+  });
+  const followingIds = followRows.map((r) => r.followingId);
+  if (followingIds.length === 0) return [];
   const rows = await prisma.wishItem.findMany({
-    where: me
-      ? { user: { isMe: false, addedById: me.id } }
-      : { user: { isMe: false } },
+    where: { userId: { in: followingIds } },
     orderBy: { addedAt: "desc" },
     take: limit,
     include: {

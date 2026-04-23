@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { UserPlus, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { listFriends } from "@/server/services/users.service";
 import { Avatar } from "@/components/ui/Avatar";
 import { pluralizeItems, timeAgo } from "@/lib/utils";
+import { FriendSearchPanel } from "@/components/friends/FriendSearchPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -25,9 +26,7 @@ export default async function FriendsPage() {
             вишлисты. Wishly напомнит перед праздником и подскажет, что подарить.
           </p>
         </div>
-        <Link href="/app/friends/new" className="btn-primary">
-          <UserPlus className="h-4 w-4" /> Добавить друга
-        </Link>
+        <FriendSearchPanel />
       </header>
 
       {friends.length === 0 ? (
@@ -44,9 +43,7 @@ export default async function FriendsPage() {
               личная записная книжка подарков. Никаких ненужных аккаунтов.
             </p>
           </div>
-          <Link href="/app/friends/new" className="btn-accent">
-            <UserPlus className="h-4 w-4" /> Добавить первого друга
-          </Link>
+          <FriendSearchPanel initiallyOpen />
         </section>
       ) : (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
