@@ -89,7 +89,7 @@ function Hero({
   adds: number;
 }) {
   return (
-    <section className="relative overflow-hidden pb-24 pt-10 sm:pt-16">
+    <section className="relative overflow-hidden pb-24 pt-28 sm:pt-32">
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 -z-10 h-[640px] bg-[radial-gradient(60%_60%_at_50%_0%,#ffe3ea_0%,transparent_60%)] dark:bg-[radial-gradient(60%_60%_at_50%_0%,rgba(255,93,131,0.18)_0%,transparent_65%)]"
